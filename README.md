@@ -1,11 +1,11 @@
-# Digital Supplement for Kupzig et al. (2014)
+# Digital Supplement for Kupzig et al. (2024)
 
-## Data (sollte noch aufgeräumt werden!)
-NEW_IDs.rds - order of IDs in NEW_x_orig.rds and NEW_y.rds and NEW_distCentrodis.rds
-NEW_distCentrodis.rds - centroids-based distance for all 1861 catchments.
-NEW_x_orig.rds - catchment descriptors, order is same as in NEW_y.rds
-NEW_y.rds - result of calibration: ID - mean_CorrF - mean_gamma - sd_gamma
-NEW_quality_monthly_bias.rds - catchment quality: ID & bias (other order than NEW_IDs!)
+## Data
+- NEW_IDs.rds - order of IDs in NEW_x_orig.rds and NEW_y.rds and NEW_distCentrodis.rds
+- NEW_distCentrodis.rds - centroids-based distance for all 1861 catchments.
+- NEW_x_orig.rds - catchment descriptors, order is same as in NEW_y.rds
+- NEW_y.rds - result of calibration: ID - mean_CorrF - mean_gamma - sd_gamma
+- NEW_quality_monthly_bias.rds - catchment quality: ID & bias (other order than NEW_IDs!)
 
 ## Code
 The code is written in R and uses the packages
