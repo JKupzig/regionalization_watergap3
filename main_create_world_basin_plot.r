@@ -66,7 +66,7 @@ for (cont in c("sa", "af", "as", "au", "eu", "na")) {
   basins_polygons_1 <- raster::rasterToPolygons(basins_raster, na.rm=TRUE, dissolve=TRUE)
 
   #getting spatial units used for regionalization of ungauged regions
-  table2use  <- read.csv(file.path(CALIB_FOLDER, paste0("mother_", cont, ".csv")), sep=",")
+  table2use  <- read.csv(file.path(CALIB_FOLDER, paste0("mother_", cont, ".csv")), sep = ",")
   table2use  <- table2use[order(table2use$arcid), ]
   mask2use   <- -table2use$bas0_id
   mask2use   <- unf.sortARCID(mask2use, cont)
@@ -97,19 +97,19 @@ ggplot() +
   ggspatial::geom_sf(data=sf::st_as_sf(calibrated_basins_world), mapping=aes(fill="not used")) +
   ggspatial::geom_sf(data=sf::st_as_sf(to_small_basins_world), mapping=aes(fill="not used due to size")) +
   ggspatial::geom_sf(data=sf::st_as_sf(used_basins_world), mapping=aes(fill="used")) +
-  scale_fill_manual(name="", values=c("not used"="grey",
-                                      "not used due to size"="brown",
-                                      "used"="cornflowerblue"),
+  scale_fill_manual(nam = "", values = c("not used" = "grey",
+                                      "not used due to size" = "brown",
+                                      "used" = "cornflowerblue"),
                     labels=c("basins with too low quality", "basins too small","used basins")) +
-  coord_sf(expand = FALSE, xlim=c(-12000372.7, 15035574), ylim=c(-8235574, 8235574)) +
+  coord_sf(expand = FALSE, xlim = c(-12000372.7, 15035574), ylim = c(-8235574, 8235574)) +
   theme_bw() +
-  theme(legend.position=c(0.5, 0.11),
+  theme(legend.position = c(0.5, 0.11),
         legend.key.size = unit(0.3, 'cm'),
-        legend.key.height= unit(0.4, 'cm'),
-        legend.key.width= unit(0.4, 'cm'),
+        legend.key.height = unit(0.4, 'cm'),
+        legend.key.width = unit(0.4, 'cm'),
         legend.spacing.x = unit(0.1, 'cm'),
         legend.background = element_rect(fill = "white", color = "black"),
-        legend.direction="horizontal",
+        legend.direction = "horizontal",
         plot.margin = unit(c(0, 0, 0, 0), "cm"))
 
 ggsave("./plots/Figure_1a_worldplot.png", plot = last_plot(), device = "png",

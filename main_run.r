@@ -40,12 +40,14 @@ reducer <- create_subset(MIN_QUALITY, MIN_SIZE)
 red_x_orig <- x_orig[reducer, ]
 red_y <-  y[reducer, ]
 
-red_distShape <- distance_to_centroid[reducer, reducer]
+reduces_distance_to_centroid <- distance_to_centroid[reducer, reducer]
 
 #Functions to use gamma
-df3_gamma <- get_classes_for_gamma(red_y$mean_gamma, nCenters=3, printPlots=F) [["df"]]
-
-thresholds <- get_classes_for_gamma(red_y$mean_gamma, nCenters=3, printPlots=F) [["dfThresholds"]]
+gamma_with_kmeans <- get_classes_for_gamma(red_y$mean_gamma,
+                                           n_centers=3,
+                                           print_plot = FALSE)
+classified_gamma <-  gamma_with_kmeans[["df"]]
+thresholds <- gamma_with_kmeans[["dfThresholds"]]
 tune1 <- thresholds[2, 1] #used in regression models
 tune2 <- thresholds[1, 3] #used in regression models
 
@@ -53,44 +55,48 @@ tune2 <- thresholds[1, 3] #used in regression models
 # Split Sample Test
 # ============================================================================
 
-cols_all = c(2, 5, 6, 7, 10, 12, 15, 16, 17, 19, 22, 25);  names(red_x_orig)[cols_all]
+cols_all <- c(2, 5, 6, 7, 10, 12, 15, 16, 17, 19, 22, 25);
+names(red_x_orig)[cols_all]
 type_all <- split_sample_test(
-  nrepeats=SAMPLING_NUMBER,
-  column_idx=cols_all,
-  tuning_pars=c(tune1, tune2),
-  catchment_distances=red_distShape,
-  catchment_characteristics=red_x_orig,
-  catchment_gamma=df3_gamma$gamma)
+  nrepeats = SAMPLING_NUMBER,
+  column_idx = cols_all,
+  tuning_pars = c(tune1, tune2),
+  catchment_distances = reduces_distance_to_centroid,
+  catchment_characteristics = red_x_orig,
+  catchment_gamma = classified_gamma$gamma)
 
 
-cols_climatic=c(19, 25); names(red_x_orig)[cols_climatic]
+cols_climatic <- c(19, 25)
+names(red_x_orig)[cols_climatic]
 type_climatic <- split_sample_test(
-  nrepeats=SAMPLING_NUMBER,
-  column_idx=cols_climatic,
-  tuning_pars=c(tune1, tune2),
-  catchment_distances=red_distShape,
-  catchment_characteristics=red_x_orig,
-  catchment_gamma=df3_gamma$gamma)
+  nrepeats = SAMPLING_NUMBER,
+  column_idx = cols_climatic,
+  tuning_pars = c(tune1, tune2),
+  catchment_distances = reduces_distance_to_centroid,
+  catchment_characteristics = red_x_orig,
+  catchment_gamma = classified_gamma$gamma)
 
 
-cols_physiographic=c(10, 16, 17); names(red_x_orig)[cols_physiographic]
+cols_physiographic <- c(10, 16, 17)
+names(red_x_orig)[cols_physiographic]
 type_physio <- split_sample_test(
-  nrepeats=SAMPLING_NUMBER,
-  column_idx=cols_physiographic,
-  tuning_pars=c(tune1, tune2),
-  catchment_distances=red_distShape,
-  catchment_characteristics=red_x_orig,
-  catchment_gamma=df3_gamma$gamma)
+  nrepeats = SAMPLING_NUMBER,
+  column_idx = cols_physiographic,
+  tuning_pars = c(tune1, tune2),
+  catchment_distances = reduces_distance_to_centroid,
+  catchment_characteristics = red_x_orig,
+  catchment_gamma = classified_gamma$gamma)
 
 
-cols_physio_clima =c(cols_physiographic, cols_climatic); names(red_x_orig)[cols_physio_clima]
+cols_physio_clima <- c(cols_physiographic, cols_climatic)
+names(red_x_orig)[cols_physio_clima]
 type_physio_climatic <- split_sample_test(
-  nrepeats=SAMPLING_NUMBER,
-  column_idx=cols_physio_clima,
-  tuning_pars=c(tune1, tune2),
-  catchment_distances=red_distShape,
-  catchment_characteristics=red_x_orig,
-  catchment_gamma=df3_gamma$gamma)
+  nrepeats = SAMPLING_NUMBER,
+  column_idx = cols_physio_clima,
+  tuning_pars = c(tune1, tune2),
+  catchment_distances = reduces_distance_to_centroid,
+  catchment_characteristics = red_x_orig,
+  catchment_gamma = classified_gamma$gamma)
 
 
 #Plots for evaluation
@@ -104,21 +110,23 @@ type_physio_climatic$info <- rep("p+cl", nrow(type_physio_climatic))
 # Plotting Figure 3 and 4
 # ============================================================================
 
-physio_first_plot <- type_physio[names(type_physio) %in% c("cal_MLR", "val_MLR", "cal_SI_1", "val_SI_1", "info")]
-climatic_first_plot <-  type_climatic[names(type_climatic) %in% c("cal_MLR", "val_MLR", "cal_SI_1", "val_SI_1", "info")]
+physio_first_plot <- type_physio[names(type_physio) %in%
+    c("cal_MLR", "val_MLR", "cal_SI_1", "val_SI_1", "info")]
+climatic_first_plot <-  type_climatic[names(type_climatic) %in%
+    c("cal_MLR", "val_MLR", "cal_SI_1", "val_SI_1", "info")]
 physio_climatic_first_plot <- type_physio_climatic[names(type_physio_climatic) %in%
-                                                    c("cal_MLR", "val_MLR",
-                                                      "cal_MLR_t", "val_MLR_t",
-                                                      "cal_SI_1", "val_SI_1",
-                                                      "cal_SI_10", "val_SI_10",
-                                                      "cal_SI_10_t", "val_SI_10_t",
-                                                      "val_SP_1",
-                                                      "info")]
+    c("cal_MLR", "val_MLR",
+      "cal_MLR_t", "val_MLR_t",
+      "cal_SI_1", "val_SI_1",
+      "cal_SI_10", "val_SI_10",
+      "cal_SI_10_t", "val_SI_10_t",
+      "val_SP_1",
+      "info")]
 all_first_plot <- type_all[names(type_all) %in%
-                             c("cal_MLR", "val_MLR",
-                               "cal_SI_1", "val_SI_1",
-                               "cal_WG2", "val_WG2",
-                               "info")]
+    c("cal_MLR", "val_MLR",
+      "cal_SI_1", "val_SI_1",
+      "cal_WG2", "val_WG2",
+      "info")]
 
 beneficial_information <- create_boxplots(climatic_first_plot, physio_first_plot,
                                          physio_climatic_first_plot, all_first_plot)
@@ -133,31 +141,32 @@ ggsave(file = file.path(target_folder, "Figure_3.png"),
 
 ################################################################################
 
-physio_second_plot <- type_physio[names(type_physio) %in% c("cal_RF", "val_RF",
-                                                            "cal_k-means", "val_k-means",
-                                                            "info")]
-climatic_second_plot <-  type_climatic[names(type_climatic) %in% c("cal_RF", "val_RF",
-                                                                   "cal_k-means", "val_k-means",
-                                                                   "info")]
+physio_second_plot <- type_physio[names(type_physio) %in%
+    c("cal_RF", "val_RF",
+      "cal_k-means", "val_k-means",
+      "info")]
+climatic_second_plot <-  type_climatic[names(type_climatic) %in%
+    c("cal_RF", "val_RF",
+      "cal_k-means", "val_k-means",
+      "info")]
 physio_climatic_second_plot <- type_physio_climatic[names(type_physio_climatic) %in%
-                                                     c("cal_RF", "val_RF",
-                                                       "cal_RF_t", "val_RF_t",
-                                                       "cal_k-means", "val_k-means",
-                                                       "info")]
+    c("cal_RF", "val_RF",
+      "cal_RF_t", "val_RF_t",
+      "cal_k-means", "val_k-means",
+      "info")]
 all_second_plot <- type_all[names(type_all) %in%
-                              c("cal_RF", "val_RF",
-                                "cal_RF_t", "val_RF_t",
-                                "cal_k-means", "val_k-means",
-                                "cal_k-means_all",  "val_k-means_all",
-                                "cal_WG2", "val_WG2",
-                                "info")]
+    c("cal_RF", "val_RF",
+      "cal_RF_t", "val_RF_t",
+      "cal_k-means", "val_k-means",
+      "cal_k-means_all",  "val_k-means_all",
+      "cal_WG2", "val_WG2",
+      "info")]
 
 ml_information <- create_boxplots(
   climatic_second_plot, physio_second_plot,
   physio_climatic_second_plot, all_second_plot)
 
-
-ggsave(file=file.path(target_folder, "Figure_4.png"),
+ggsave(file = file.path(target_folder, "Figure_4.png"),
   ml_information,
   width = 25,
   height = 12,

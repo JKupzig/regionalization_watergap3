@@ -53,16 +53,16 @@ df2examine$gamma <- red_y$mean_gamma #add gamma
 
 
 df2plot <- df2examine
-count = 1
+count <- 1
 for (name in colnames(df2plot)){
   colnames(df2plot)[count] <- labels2use[[name]]
-  count = count + 1
+  count <- count + 1
 }
 
 png(file = file.path(TARGETFOLDER, "appendix_a1_correlation.png"),
-    res=300, units = "cm", height=32, width = 25)
-M = cor(df2plot)
-corrplot::corrplot(M, order = 'AOE', type = 'lower', diag = FALSE,
+    res = 300, units = "cm", height=32, width = 25)
+correlation_matirx <- cor(df2plot)
+corrplot::corrplot(correlation_matirx, order = 'AOE', type = 'lower', diag = FALSE,
                    addCoef.col = 'black', number.cex = 0.8,
                    tl.col = 'black', tl.srt = 65, tl.cex = 0.95)
 
@@ -74,7 +74,6 @@ dev.off()
 basinInfoLong <- tidyr::pivot_longer(df2examine, cols=all_of(columns2use))
 basinInfoLong$name <-  factor(basinInfoLong$name, levels=columns2use)
 
-
 ggplot() +
   geom_histogram(basinInfoLong, mapping = aes(value), alpha = 1, fill = "cornflowerblue") +
   facet_wrap(~name, scales = "free_x", labeller=labeller(name = labels2use)) +
@@ -85,4 +84,3 @@ ggsave(file.path(TARGETFOLDER, "/appendix_a2_distribution.png"),
        width = 28, height = 25,
        units = "cm",
        dpi = 300)
-

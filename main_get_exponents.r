@@ -116,8 +116,6 @@ for (name in names(coeffs_wg2)) {
 }
 
 
-
-
 # evaluating model for all gauged basins
 y_est_new <- new_model(
   red_x_orig[columns_new_method],
@@ -144,4 +142,3 @@ log4r::info(my_logger, "#####################################")
 log4r::info(my_logger, sprintf("MAE when using mean as predictor: %f", most_simple_benchmark))
 log4r::info(my_logger, sprintf("MAE when using WG2 as predictor: %f", wg2_benchmark))
 log4r::info(my_logger, sprintf("MAE when using new MLR as predictor: %f", mlr_benchmark))
-
