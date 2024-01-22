@@ -48,11 +48,13 @@ red_x_orig <- x_orig[reducer,]
 red_y <- y[reducer,]
 
 thresholds <- get_classes_for_gamma(red_y$mean_gamma, nCenters=3, printPlots=F) [["dfThresholds"]]
-tune1 <- thresholds[2, 1] #used in regression models
-tune2 <- thresholds[1, 3] #used in regression models
+lower_bound_tuning <- thresholds[2, 1]
+upper_bound_tuning <- thresholds[1, 3]
 
-columns_new_method <- c(10,16,17,19,25) ; colnames(x_orig)[columns_new_method]    #physiographic and climatic
-columns_b2b <- c(2,19, 5, 18, 10, 17); names(x_orig[columns_b2b])
+columns_new_method <- c(10, 16, 17, 19, 25)
+colnames(x_orig)[columns_new_method]
+columns_b2b <- c(2, 19, 5, 18, 10, 17)
+names(x_orig[columns_b2b])
 
 
 ################################################################################
@@ -62,18 +64,17 @@ coefficients_new <- NULL; maes <- NULL
 pb <- txtProgressBar(min = 1, max = SAMPLING_NUMBER, style = 3)
 set.seed(123)
 
-for (i in 1:SAMPLING_NUMBER)
-  {
+for (i in 1:SAMPLING_NUMBER) {
   setTxtProgressBar(pb, i)
   ind <- sample(2, nrow(red_x_orig), replace = TRUE, prob = c(0.50, 0.50))
   maes_mlr <- apply.MultipleLinearRegression(
     ind, red_x_orig[columns_new_method], red_y$mean_gamma,
-    mod = TRUE, tuningPars = c(tune1, tune2),
+    mod = TRUE, tuningPars = c(lower_bound_tuning, upper_bound_tuning),
     return_regression = TRUE)
 
   y_est <- new_model(red_x_orig[columns_new_method],
                      maes_mlr$regression$coefficients,
-                     tune1, tune2)
+                     lower_bound_tuning, upper_bound_tuning)
 
   bm <- mean(abs(y_est - red_y$mean_gamma))
   coefficients_new <- rbind(coefficients_new, maes_mlr$regression$coefficients)
@@ -84,7 +85,7 @@ idx <- which(maes == min(maes))
 coeffs_new <- coefficients_new[idx, ]
 log4r::info(my_logger, "#####################################")
 log4r::info(my_logger, "Info to use for MLR approach:")
-log4r::info(my_logger, sprintf("Tuning pars: %f & %f", tune1, tune2))
+log4r::info(my_logger, sprintf("Tuning pars: %f & %f", lower_bound_tuning, upper_bound_tuning))
 for (name in names(coeffs_new)) {
   log4r::info(my_logger, sprintf("%s: %f", name, coeffs_new[name]))
 }
@@ -120,7 +121,7 @@ for (name in names(coeffs_wg2)) {
 y_est_new <- new_model(
   red_x_orig[columns_new_method],
   coeffs_new,
-  tune1, tune2)
+  lower_bound_tuning, upper_bound_tuning)
 
 y_est_wg2 <- wg2_model(
   red_x_orig[columns_b2b],

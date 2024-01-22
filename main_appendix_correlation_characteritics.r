@@ -71,12 +71,12 @@ dev.off()
 
 ################
 
-basinInfoLong <- tidyr::pivot_longer(df2examine, cols=all_of(columns2use))
-basinInfoLong$name <-  factor(basinInfoLong$name, levels=columns2use)
+basin_info_long <- tidyr::pivot_longer(df2examine, cols = all_of(columns2use))
+basin_info_long$name <-  factor(basin_info_long$name, levels = columns2use)
 
 ggplot() +
-  geom_histogram(basinInfoLong, mapping = aes(value), alpha = 1, fill = "cornflowerblue") +
-  facet_wrap(~name, scales = "free_x", labeller=labeller(name = labels2use)) +
+  geom_histogram(basin_info_long, mapping = aes(value), alpha = 1, fill = "cornflowerblue") +
+  facet_wrap(~name, scales = "free_x", labeller = labeller(name = labels2use)) +
   theme_bw()
 
 ggsave(file.path(TARGETFOLDER, "/appendix_a2_distribution.png"),

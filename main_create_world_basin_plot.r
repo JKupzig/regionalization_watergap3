@@ -42,7 +42,7 @@ for (cont in c("sa", "af", "as", "au", "eu", "na")) {
 
   rlog::log_info(sprintf("starting continent %s", cont))
 
-  RasterTempl = watergap3data::GCRC_list[[cont]]
+  RasterTempl <- watergap3data::GCRC_list[[cont]]
   crs2use <- raster::crs(RasterTempl)
 
   name_basins <- sprintf("G_BASCALIB_GRDC_%s.UNF0", cont)
