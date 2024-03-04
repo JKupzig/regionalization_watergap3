@@ -1,7 +1,9 @@
-setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
+#setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
 # set you own working directory (position of run.r) here
 
 # prodcues Figure 1a
+
+rm(list = ls())
 
 library(ggplot2)
 library(tidyr)

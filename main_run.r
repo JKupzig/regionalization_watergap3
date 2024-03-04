@@ -1,4 +1,4 @@
-setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
+#setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
 # set you own working directory (position of run.r) here
 
 # Runs split sample test an produces Figure 3 and 4.
@@ -21,7 +21,7 @@ source("./helper_functions.r")
 
 MIN_SIZE <- 5000
 MIN_QUALITY <- 0.2
-SAMPLING_NUMBER <- 100 #here 100 is used in paper
+SAMPLING_NUMBER <- 5 #here 100 is used in paper
 
 folder2use <- "./data"
 target_folder <- "./plots"

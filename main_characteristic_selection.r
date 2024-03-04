@@ -1,4 +1,4 @@
-setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
+#setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
 # set you own working directory (position of run.r) here
 
 # Description:
@@ -148,15 +148,15 @@ pearson <- cor(df2examine, method = "kendall")
 correlation <- pearson[which(colnames(pearson) == "gamma"), ]
 correlation_df3 <- get_data_frame(correlation, columns2use, "kendall")
 
-new_result <- merge(df_IG, correlation_df, by.x = "name", by.y = "name")
+new_result <- merge(information_gain_df, correlation_df, by.x = "name", by.y = "name")
 new_result <- merge(new_result, correlation_df2, by.x = "name", by.y = "name")
 new_result <- merge(new_result, correlation_df3, by.x = "name", by.y = "name")
 new_result <- new_result[order(new_result$IG, decreasing = TRUE), ]
 new_result[, c(2, 3, 4, 5, 6)] <- round(new_result[, c(2, 3, 4, 5, 6)], 2)
 
 
-my_table <- gridExtra::tableGrob(new_result, theme = tt2, rows = NULL)
+my_table <- gridExtra::tableGrob(new_result[, c(1,3,4,5,6)], theme = tt2, rows = NULL)
 grid.newpage()
 grid.draw(my_table)
-ggsave(file = file.path(target_folder, "Table_1b_attribute_selection.png"),
+ggsave(file = file.path(target_folder, "Table_1b_entropy_correlation.png"),
   my_table, width = 14, height = 10, units = "cm")

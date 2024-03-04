@@ -1,4 +1,4 @@
-setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
+#setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
 # set you own working directory (position of run.r) here
 
 # selects the best model out of WG2 and MLR to create global gamma plots and run the model worldwide
@@ -47,7 +47,7 @@ reducer <- create_subset(MIN_QUALITY, MIN_SIZE)
 red_x_orig <- x_orig[reducer,]
 red_y <- y[reducer,]
 
-thresholds <- get_classes_for_gamma(red_y$mean_gamma, nCenters=3, printPlots=F) [["dfThresholds"]]
+thresholds <- get_classes_for_gamma(red_y$mean_gamma, n_centers = 3, print_plot = FALSE) [["dfThresholds"]]
 lower_bound_tuning <- thresholds[2, 1]
 upper_bound_tuning <- thresholds[1, 3]
 
@@ -55,6 +55,8 @@ columns_new_method <- c(10, 16, 17, 19, 25)
 colnames(x_orig)[columns_new_method]
 columns_b2b <- c(2, 19, 5, 18, 10, 17)
 names(x_orig[columns_b2b])
+columns_false <- c(19,25)
+names(x_orig[columns_false])
 
 
 ################################################################################
@@ -92,7 +94,7 @@ for (name in names(coeffs_new)) {
 
 
 set.seed(123)
-coefficients_b2b <- NULL; wg2_maes <- NULL
+coefficients_b2b <- NULL; b2b_maes <- NULL
 for (i in 1:SAMPLING_NUMBER){
   setTxtProgressBar(pb, i)
   ind <- sample(2, nrow(red_x_orig), replace = TRUE, prob = c(0.50, 0.50))
@@ -104,11 +106,11 @@ for (i in 1:SAMPLING_NUMBER){
 
   y_est <- wg2_model(red_x_orig[columns_b2b], maes_b2b$regression$coefficients)
   quality <- mean(abs(y_est - red_y$mean_gamma))
-  b2b_maes <- c(wg2_maes, quality)
+  b2b_maes <- c(b2b_maes, quality)
   coefficients_b2b <- rbind(coefficients_b2b, maes_b2b$regression$coefficients)
 }
 
-idx <- which(wg2_maes == min(wg2_maes))
+idx <- which(b2b_maes == min(b2b_maes))
 coeffs_wg2 <- coefficients_b2b[idx,]
 log4r::info(my_logger, "#####################################")
 log4r::info(my_logger, "Info to use for WG2 approach:")
@@ -116,6 +118,8 @@ for (name in names(coeffs_wg2)) {
   log4r::info(my_logger, sprintf("%s: %f", name, coeffs_wg2[name]))
 }
 
+
+######################################
 
 # evaluating model for all gauged basins
 y_est_new <- new_model(
@@ -143,3 +147,4 @@ log4r::info(my_logger, "#####################################")
 log4r::info(my_logger, sprintf("MAE when using mean as predictor: %f", most_simple_benchmark))
 log4r::info(my_logger, sprintf("MAE when using WG2 as predictor: %f", wg2_benchmark))
 log4r::info(my_logger, sprintf("MAE when using new MLR as predictor: %f", mlr_benchmark))
+
