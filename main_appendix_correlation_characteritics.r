@@ -1,4 +1,4 @@
-setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
+#setwd(r"(C:\Users\jenny\...")
 # set you own working directory here
 
 # Description:
@@ -75,11 +75,12 @@ basin_info_long <- tidyr::pivot_longer(df2examine, cols = all_of(columns2use))
 basin_info_long$name <-  factor(basin_info_long$name, levels = columns2use)
 
 ggplot() +
-  geom_histogram(basin_info_long, mapping = aes(value), alpha = 1, fill = "cornflowerblue") +
+  geom_histogram(basin_info_long, mapping = aes(value),
+                 alpha = 1, fill = "cornflowerblue") +
   facet_wrap(~name, scales = "free_x", labeller = labeller(name = labels2use)) +
   theme_bw()
 
-ggsave(file.path(TARGETFOLDER, "/appendix_a2_distribution.png"),
+ggsave(file.path(TARGETFOLDER, "appendix_a2_distribution.png"),
        device = "png",
        width = 28, height = 25,
        units = "cm",

@@ -1,4 +1,4 @@
-#setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
+# setwd(r"(C:\Users\jenny\...")
 # set you own working directory (position of run.r) here
 
 # selects the best model out of WG2 and MLR to create global gamma plots and run the model worldwide
@@ -34,9 +34,9 @@ log4r::info(my_logger, sprintf("settings: min_size=%g, min_quality=%f, n_samples
                                MIN_SIZE, MIN_QUALITY, SAMPLING_NUMBER))
 
 #Load Vars
-folder2use <- "./data"
-x_orig <- readRDS(file.path(folder2use, "NEW_x_orig.rds"))
-y <- readRDS(file.path(folder2use, "NEW_y.rds"))
+ROOT <- "./data"
+x_orig <- readRDS(file.path(ROOT, "NEW_x_orig.rds"))
+y <- readRDS(file.path(ROOT, "NEW_y.rds"))
 
 
 # ============================================================================
@@ -44,8 +44,8 @@ y <- readRDS(file.path(folder2use, "NEW_y.rds"))
 # ============================================================================
 
 reducer <- create_subset(MIN_QUALITY, MIN_SIZE)
-red_x_orig <- x_orig[reducer,]
-red_y <- y[reducer,]
+red_x_orig <- x_orig[reducer, ]
+red_y <- y[reducer, ]
 
 thresholds <- get_classes_for_gamma(red_y$mean_gamma, n_centers = 3, print_plot = FALSE) [["dfThresholds"]]
 lower_bound_tuning <- thresholds[2, 1]
@@ -62,7 +62,8 @@ names(x_orig[columns_false])
 ################################################################################
 # getting coefficients
 ################################################################################
-coefficients_new <- NULL; maes <- NULL
+coefficients_new <- NULL
+maes <- NULL
 pb <- txtProgressBar(min = 1, max = SAMPLING_NUMBER, style = 3)
 set.seed(123)
 
@@ -147,4 +148,3 @@ log4r::info(my_logger, "#####################################")
 log4r::info(my_logger, sprintf("MAE when using mean as predictor: %f", most_simple_benchmark))
 log4r::info(my_logger, sprintf("MAE when using WG2 as predictor: %f", wg2_benchmark))
 log4r::info(my_logger, sprintf("MAE when using new MLR as predictor: %f", mlr_benchmark))
-

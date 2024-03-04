@@ -1,4 +1,4 @@
-#setwd(r"(C:\Users\jenny\MyProject_sciebo\_Nina\Regionalization\R\data_availability\regionalization_watergap3)")
+# setwd(r"(C:\Users\jenny\...")
 # set you own working directory (position of run.r) here
 
 # prodcues Figure 1a

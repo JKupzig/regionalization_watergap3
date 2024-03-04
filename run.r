@@ -1,4 +1,4 @@
-setwd(r"(C:/Users/jenny/MyProject_sciebo/_Nina/Regionalization/R/data_availability)")
+# setwd(r"(C:\Users\jenny\...")
 # set you own working directory (position of run.r) here
 
 rm(list=ls())
@@ -110,7 +110,7 @@ physio_climatic_first_plot <- type_physio_climatic[names(type_physio_climatic) %
                                                       "cal_SI_1", "val_SI_1",
                                                       "cal_SI_10", "val_SI_10",
                                                       "cal_SI_10_t", "val_SI_10_t",
-                                                       "val_SP_1", 
+                                                       "val_SP_1",
                                                       "info")]
 all_first_plot <- type_all[names(type_all) %in%
                              c("cal_MLR", "val_MLR",
