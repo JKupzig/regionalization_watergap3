@@ -25,11 +25,11 @@ hist_gamma <- ggplot(red_results, aes(x=mean_gamma)) +
                  breaks=c(0, 1, 2, 3, 4, 5)) +
   labs(x="calibrated Gamma (-)", y = "Count") +
   scale_x_continuous(breaks=c(0.5, 1.5, 2.5, 3.5, 4.5),
-                     labels=c("0.1 to 1",
-                              "1.01 to 2",
-                              "2.01 to 3",
-                              "3.01 to 4",
-                              "4.01 to 5")) +
+                     labels=c("0.1-1",
+                              "1.01-2",
+                              "2.01-3",
+                              "3.01-4",
+                              "4.01-5")) +
   theme_classic()
 
 

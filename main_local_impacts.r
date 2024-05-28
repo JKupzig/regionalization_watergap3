@@ -50,18 +50,19 @@ plot_lines(soil_india, "Soil Storage (mm)",
            sprintf("Figure_6_india_soil_%d.png", 1989))
 
 # Figure 7
+x_label <- expression('Discharge (m'^3*'s'^-1*')')
 tiber <- read.table(file.path(folder2use, "tiber_2010.txt"))
-plot_lines(tiber, "Discharge (m3/s)",
+plot_lines(tiber, x_label,
            sprintf("Month (%d)", 2010),
            sprintf("Figure_7_tiber_%d.png", 2010),
            "topleft")
 ebro <- read.table(file.path(folder2use, "ebro_2010.txt"))
-plot_lines(ebro, "Discharge (m3/s)",
+plot_lines(ebro, x_label,
            sprintf("Month (%d)", 2010),
            sprintf("Figure_7_ebro_%d.png", 2010),
            "topright")
 rio_negro <- read.table(file.path(folder2use, "rio_negro_2010.txt"))
-plot_lines(rio_negro, "Discharge (m3/s)",
+plot_lines(rio_negro, x_label,
            sprintf("Month (%d)", 2010),
            sprintf("Figure_7_rio_negro_%d.png", 2010),
            "topleft")
