@@ -37,8 +37,13 @@ apply.spatialProximity <- function(ind, distanceMatrix, y, k=1,mod=F, tuningPars
 
   mae_cal <- mae(obs=data.training.gamma, sim=estimatedGammaVec_cal)
   mae_val <- mae(obs=data.test.gamma, sim=estimatedGammaVec_val)
+  
+  y_estimated <- y
+  y_estimated[ind==1] <- estimatedGammaVec_cal
+  y_estimated[ind==2] <- estimatedGammaVec_val
+  df_result = data.frame(list("y_given"=y, "y_estimated"=y_estimated, "ind"=ind))
 
-  list2return = list("mae_cal"=mae_cal, "mae_val"=mae_val)
+  list2return = list("mae_cal"=mae_cal, "mae_val"=mae_val, "result"=df_result)
 
   return(list2return)
 }

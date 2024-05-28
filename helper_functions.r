@@ -1,7 +1,7 @@
 
-create_subset <- function(min_quality, min_size = NULL)
+create_subset <- function(min_quality, min_size = NULL, use_kge="off")
 {
-
+  kge <- read.table(file.path("./data", "monthly_kge_below_04.txt"), header=T)
   quality <- readRDS(file.path("./data", "NEW_quality_monthly_bias.rds"))
   id_order <- readRDS(file.path("./data", "NEW_IDs.rds"))
   quality <- quality[order(match(quality$V1, id_order)), ]
@@ -9,7 +9,11 @@ create_subset <- function(min_quality, min_size = NULL)
   ind <- (quality[, 2] > (1 - min_quality)) &
     (quality[, 2] < (1 + min_quality))
 
-
+  if (use_kge == "on")
+  {
+    ids_to_delete <- which(id_order %in% kge$ids)
+    ind[ids_to_delete] <- FALSE
+  }
   if (!is.null(min_size))
   {
     data <- readRDS(file.path("./data", "NEW_x_orig.rds"))

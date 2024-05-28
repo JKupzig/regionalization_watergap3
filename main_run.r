@@ -36,7 +36,7 @@ distance_to_centroid <- readRDS(file.path(folder2use, "NEW_distCentroid.rds"))
 # Selection of Basins
 # ============================================================================
 
-reducer <- create_subset(MIN_QUALITY, MIN_SIZE)
+reducer <- create_subset(MIN_QUALITY, MIN_SIZE, use_kge ="on")
 red_x_orig <- x_orig[reducer, ]
 red_y <-  y[reducer, ]
 
@@ -46,6 +46,7 @@ reduces_distance_to_centroid <- distance_to_centroid[reducer, reducer]
 gamma_with_kmeans <- get_classes_for_gamma(red_y$mean_gamma,
                                            n_centers=3,
                                            print_plot = FALSE)
+
 classified_gamma <-  gamma_with_kmeans[["df"]]
 thresholds <- gamma_with_kmeans[["dfThresholds"]]
 tune1 <- thresholds[2, 1] #used in regression models
@@ -132,7 +133,7 @@ beneficial_information <- create_boxplots(climatic_first_plot, physio_first_plot
                                          physio_climatic_first_plot, all_first_plot)
 
 
-ggsave(file = file.path(target_folder, "Figure_3.png"),
+ggsave(file = file.path(target_folder, "Figure_3_kge_on.png"),
   beneficial_information,
   width = 25,
   height = 12,
@@ -166,7 +167,7 @@ ml_information <- create_boxplots(
   climatic_second_plot, physio_second_plot,
   physio_climatic_second_plot, all_second_plot)
 
-ggsave(file = file.path(target_folder, "Figure_4.png"),
+ggsave(file = file.path(target_folder, "Figure_4_kge_on.png"),
   ml_information,
   width = 25,
   height = 12,
