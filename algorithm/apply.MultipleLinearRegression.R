@@ -1,14 +1,21 @@
 
 source("./algorithm/mae.r")
 
-apply.MultipleLinearRegression <- function(ind, x, y, mod=F, tuningPars=c(1.18,3.48), ln="off",
-                                           return_regression = F){
+run.MultipleLinearRegression <- function(ind,
+                             x,
+                             y,
+                             tuningPars=c(1.18,3.48),
+                             ln="off",
+                             return_regression = FALSE){
 
-  data.training <- x[ind==1, ] #c(3,6,7,8,11,13,16,17,19,20,21,22,23,24,25)
-  data.test <- x[ind==2, ] #c(3,6,7,8,11,13,16,17,19,20,21,22,23,24,25)
+  data.training <- x[ind==1, ]
+  data.test <- x[ind==2, ]
 
-  data.training$gamma <- y[ind==1] #
+  data.training$gamma <- y[ind==1]
   data.test$gamma <- y[ind==2]
+
+  lower <- tuningPars[1]
+  upper <- tuningPars[2]
 
   if (ln=="on"){
     regr <- lm(log(data.training$gamma) ~ ., data.training)
@@ -22,29 +29,53 @@ apply.MultipleLinearRegression <- function(ind, x, y, mod=F, tuningPars=c(1.18,3
     gamma_val <- predict(regr, newdata=data.test)
   }
 
+  gamma_cal_limited <- limit_gamma_to_be_valid(gamma_cal, upper_limit=5, lower_limit=0.1)
+  gamma_val_limited <- limit_gamma_to_be_valid(gamma_val, upper_limit=5, lower_limit=0.1)
 
-  if (mod==F){
-    gamma_cal2 <- ifelse(gamma_cal>5, 5,
-                         ifelse(gamma_cal<0.1, 0.1, gamma_cal))
-    gamma_val2 <- ifelse(gamma_val>5, 5,
-                         ifelse(gamma_val<0.1, 0.1, gamma_val))
-  } else {
-    gamma_cal2 <- ifelse(as.numeric(gamma_cal)>=tuningPars[2], 5,
-                         ifelse(as.numeric(gamma_cal)<=tuningPars[1], 0.1, as.numeric(gamma_cal)))
-    gamma_val2 <- ifelse(as.numeric(gamma_val)>=tuningPars[2], 5,
-                         ifelse(as.numeric(gamma_val)<=tuningPars[1], 0.1, as.numeric(gamma_val)))
-  }
-  mae_cal <- mae(obs=data.training$gamma, sim=gamma_cal2)
-  mae_val <- mae(obs=data.test$gamma, sim=gamma_val2)
-
-  df_cal = data.frame(obs=data.training$gamma, sim=gamma_cal2)
-  df_val = data.frame(obs=data.test$gamma, sim=gamma_val2)
-
-  list2return = list("mae_cal"=mae_cal, "mae_val"=mae_val, "df_cal"=df_cal, "df_val"=df_val)
+  gamma_cal_tuned <- limit_gamma_to_be_valid(gamma_cal, upper_limit=upper, lower_limit=lower)
+  gamma_val_tuned <- limit_gamma_to_be_valid(gamma_val, upper_limit=upper, lower_limit=lower)
 
   if (return_regression == TRUE){
-    list2return[["regression"]] = regr
+    return(regr)
+  } else {
+    return(list(gamma_cal_limited=gamma_cal_limited,
+                gamma_val_limited=gamma_val_limited,
+                gamma_cal_tuned=gamma_cal_tuned,
+                gamma_val_tuned=gamma_val_tuned,
+                gamma_cal_calibrated=data.training$gamma,
+                gamma_val_calibrated=data.test$gamma))
   }
-  return(list2return)
+}
 
+
+apply.MultipleLinearRegression <- function(ind,
+                                           x,
+                                           y,
+                                           tuningPars=c(1.18,3.48),
+                                           ln="off") {
+
+  precictions <- run.MultipleLinearRegression(
+    ind=ind,
+    x=x,
+    y=y,
+    tuningPars=tuningPars,
+    ln=ln)
+
+  mae_cal <- mae(obs=precictions$gamma_cal_calibrated,
+                 sim=precictions$gamma_cal_limited)
+  mae_val <- mae(obs=precictions$gamma_val_calibrated,
+                 sim=precictions$gamma_val_limited)
+
+  mae_cal_t <- mae(obs=precictions$gamma_cal_calibrated,
+                   sim=precictions$gamma_cal_tuned)
+  mae_val_t <- mae(obs=precictions$gamma_val_calibrated,
+                   sim=precictions$gamma_val_tuned)
+
+
+  list2return = list("mae_cal"=mae_cal,
+                     "mae_val"=mae_val,
+                     "mae_cal_t"=mae_cal_t,
+                     "mae_val_t"=mae_val_t)
+
+  return(list2return)
 }

@@ -25,7 +25,7 @@ y <- readRDS(file.path(folder2use, "NEW_y.rds"))
 # Selection of Basins
 # ============================================================================
 
-reducer <- create_subset(MIN_QUALITY, MIN_SIZE)
+reducer <- create_subset(MIN_QUALITY, MIN_SIZE, use_kge = "on")
 red_x_orig <- x_orig[reducer, ]
 red_y <-  y[reducer, ]
 
@@ -59,7 +59,7 @@ for (name in colnames(df2plot)){
   count <- count + 1
 }
 
-png(file = file.path(TARGETFOLDER, "appendix_a1_correlation.png"),
+png(file = file.path(TARGETFOLDER, "appendix_a1_correlation_kge_on.png"),
     res = 300, units = "cm", height=32, width = 25)
 correlation_matirx <- cor(df2plot)
 corrplot::corrplot(correlation_matirx, order = 'AOE', type = 'lower', diag = FALSE,
@@ -80,7 +80,7 @@ ggplot() +
   facet_wrap(~name, scales = "free_x", labeller = labeller(name = labels2use)) +
   theme_bw()
 
-ggsave(file.path(TARGETFOLDER, "appendix_a2_distribution.png"),
+ggsave(file.path(TARGETFOLDER, "appendix_a2_distribution_kge_on.png"),
        device = "png",
        width = 28, height = 25,
        units = "cm",

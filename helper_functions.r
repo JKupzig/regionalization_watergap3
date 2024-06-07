@@ -1,25 +1,49 @@
 
-create_subset <- function(min_quality, min_size = NULL, use_kge="off")
+read_kge <- function(cont, type, red_y, red_x_orig, ind, ind_type=2){
+  kge_cal_cont <- read.table(sprintf("./data/KGE/KGE_%s_%s.txt", type, cont), sep="\t", header=T)
+  kge_cal_cont$cont <- cont
+  kge_cal_cont$runtype <- type
+
+  missing_basins <- red_y[!(red_y$ID %in% kge_cal_cont$station_id) &
+                            red_x_orig$continent == cont, 1]
+  if (length(missing_basins) > 0){
+    stop(sprintf("something wrong with basins in %s!", cont))
+  }
+
+  reduced_kge_cont <- kge_cal_cont[kge_cal_cont$station_id %in% red_y$ID[ind==ind_type],]
+  return(reduced_kge_cont)
+}
+
+
+create_subset <- function(min_quality=NULL, min_size = NULL, use_kge="off")
 {
   kge <- read.table(file.path("./data", "monthly_kge_below_04.txt"), header=T)
   quality <- readRDS(file.path("./data", "NEW_quality_monthly_bias.rds"))
   id_order <- readRDS(file.path("./data", "NEW_IDs.rds"))
-  quality <- quality[order(match(quality$V1, id_order)), ]
+  sorted_quality <- quality[order(match(quality$V1, id_order)), ]
 
-  ind <- (quality[, 2] > (1 - min_quality)) &
-    (quality[, 2] < (1 + min_quality))
+  ind <- rep(TRUE, nrow(quality))
+
+  if (!is.null(min_quality))
+  {
+    ind_quality <- (sorted_quality[, 2] > (1 - min_quality)) &
+      (sorted_quality[, 2] < (1 + min_quality))
+    ind <- ind & ind_quality
+  }
 
   if (use_kge == "on")
   {
-    ids_to_delete <- which(id_order %in% kge$ids)
+    ids_to_delete <- which(sorted_quality$V1 %in% kge$ids)
     ind[ids_to_delete] <- FALSE
   }
+
   if (!is.null(min_size))
   {
     data <- readRDS(file.path("./data", "NEW_x_orig.rds"))
     ind_size <- data$areaBasin >= min_size
     ind <- ind & ind_size
   }
+
   return(ind)
 }
 
@@ -125,4 +149,26 @@ wg2_model <- function(data, coeffs) {
   y_val <- ifelse(y_val > 5, 5, y_val)
   y_val <- ifelse(y_val < 0.1, 0.1, y_val)
   return(y_val)
+}
+
+create_delta <- function(list_to_iterate,
+                         reference_name,
+                         attribute_name){
+
+  new_columns_name <- "delta" #sprintf("delta_%s_%s", attribute_name, reference_name)
+  reference <- list_to_iterate[[reference_name]][[3]]
+  if (is.null(reference)){
+    stop("assigned reference name not in list to examine!")
+  }
+
+  names2examine <- names(list_to_iterate)[!names(list_to_iterate) %in% c(reference_name, "DONOR")]
+  for (name in names2examine){
+    values <- list_to_iterate[[name]][[3]]
+    values[[new_columns_name]] <- values[[attribute_name]] - reference[[attribute_name]]
+    list_to_iterate[[name]][[3]] <- values
+  }
+  list_to_iterate[[reference_name]][[3]][[new_columns_name]] <- NA
+  list_to_iterate[["DONOR"]][[3]][[new_columns_name]] <- NA
+
+  return(list_to_iterate)
 }

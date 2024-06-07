@@ -10,7 +10,7 @@ library(tidyr)
 library(dplyr)
 library(RColorBrewer)
 
-source("./review.split_sample_test.r")
+source("./split_sample_test.r")
 source("./plotting.r")
 source("./helper_functions.r")
 
@@ -75,57 +75,57 @@ descriptor_sets = list(
     result_df = NULL)
   )
 
-# for (subset in names(descriptor_sets)){
-#   columns <- descriptor_sets[[subset]][["columns"]]
-#
-#   print(sprintf("%s: %s", subset, paste(names(red_x_orig)[columns], collapse=" ")))
-#   array_all <- split_sample_test(
-#     nrepeats = SAMPLING_NUMBER,
-#     column_idx = columns,
-#     tuning_pars = c(lower, upper),
-#     catchment_distances = reduces_distance_to_centroid,
-#     catchment_characteristics = red_x_orig,
-#     catchment_gamma = classified_gamma$gamma)
-#
-#   type_all <- result_array_to_df(array_all)
-#   type_all$info <- subset
-#
-#   descriptor_sets[[subset]][["result_array"]] <- array_all
-#   descriptor_sets[[subset]][["result_df"]] <- type_all
-# }
-#
-# array_all <- descriptor_sets[["p+cl"]][["result_array"]]
-# array_physio_climatic <- descriptor_sets[["subset"]][["result_array"]]
-# array_climatic_all <- descriptor_sets[["cl"]][["result_array"]]
-# array_physio_all <- descriptor_sets[["p"]][["result_array"]]
-#
-# type_all <- descriptor_sets[["p+cl"]][["result_df"]]
-# type_physio_climatic <- descriptor_sets[["subset"]][["result_df"]]
-# type_climatic_all <- descriptor_sets[["cl"]][["result_df"]]
-# type_physio_all <- descriptor_sets[["p"]][["result_df"]]
+for (subset in names(descriptor_sets)){
+  columns <- descriptor_sets[[subset]][["columns"]]
+
+  print(sprintf("%s: %s", subset, paste(names(red_x_orig)[columns], collapse=" ")))
+  array_all <- split_sample_test(
+    nrepeats = SAMPLING_NUMBER,
+    column_idx = columns,
+    tuning_pars = c(lower, upper),
+    catchment_distances = reduces_distance_to_centroid,
+    catchment_characteristics = red_x_orig,
+    catchment_gamma = classified_gamma$gamma)
+
+  type_all <- result_array_to_df(array_all)
+  type_all$info <- subset
+
+  descriptor_sets[[subset]][["result_array"]] <- array_all
+  descriptor_sets[[subset]][["result_df"]] <- type_all
+}
+
+array_all <- descriptor_sets[["p+cl"]][["result_array"]]
+array_physio_climatic <- descriptor_sets[["subset"]][["result_array"]]
+array_climatic_all <- descriptor_sets[["cl"]][["result_array"]]
+array_physio_all <- descriptor_sets[["p"]][["result_array"]]
+
+type_all <- descriptor_sets[["p+cl"]][["result_df"]]
+type_physio_climatic <- descriptor_sets[["subset"]][["result_df"]]
+type_climatic_all <- descriptor_sets[["cl"]][["result_df"]]
+type_physio_all <- descriptor_sets[["p"]][["result_df"]]
 #
 # # ============================================================================
 # # Saving information for appendix
 # # ============================================================================
 # saveRDS(type_all, "./data/run_results/type_all.rds")
-# saveRDS(type_climatic_all, "./data/run_results/type_climatic_all.rds")
-# saveRDS(type_physio_all, "./data/run_results/type_physio_all.rds")
+# saveRDS(type_climatic_all, "./data/run_results/type_climatic.rds")
+# saveRDS(type_physio_all, "./data/run_results/type_physio.rds")
 # saveRDS(type_physio_climatic, "./data/run_results/type_physio_climatic.rds")
 #
 # saveRDS(array_all, "./data/run_results/array_all.rds")
-# saveRDS(array_climatic_all, "./data/run_results/array_climatic_all.rds")
-# saveRDS(array_physio_all, "./data/run_results/array_physio_all.rds")
+# saveRDS(array_climatic_all, "./data/run_results/array_climatic.rds")
+# saveRDS(array_physio_all, "./data/run_results/array_physio.rds")
 # saveRDS(array_physio_climatic, "./data/run_results/array_physio_climatic.rds")
 
 type_all <- readRDS("./data/run_results/type_all.rds")
-type_climatic <- readRDS("./data/run_results/type_climatic.rds")
-type_physio <- readRDS("./data/run_results/type_physio.rds")
+type_climatic_all <- readRDS("./data/run_results/type_climatic.rds")
+type_physio_all <- readRDS("./data/run_results/type_physio.rds")
 type_physio_climatic <- readRDS("./data/run_results/type_physio_climatic.rds")
 
 array_all <- readRDS("./data/run_results/array_all.rds")
-array_climatic <- readRDS("./data/run_results/array_climatic.rds")
-array_physio <- readRDS("./data/run_results/array_physio.rds")
-array_climatic <- readRDS("./data/run_results/type_physio_climatic.rds")
+array_climatic_all <- readRDS("./data/run_results/array_climatic.rds")
+array_physio_all <- readRDS("./data/run_results/array_physio.rds")
+array_physio_climatic <- readRDS("./data/run_results/array_physio_climatic.rds")
 
 
 # ============================================================================
@@ -174,15 +174,17 @@ ggsave(file = file.path(target_folder, "tuning_evaluation.png"),
        dpi = 300)
 
 # ============================================================================
-# Plotting Figure 3 and 4
+# Plotting Figure 3 and 4 and 5
 # ============================================================================
 
+# regression based approaches MLR, RF
+
 independent_from_descriptors <- c("cal_WG2", "val_WG2",
-                                  "cal_SP_1", "val_SP_1")
-shown_sets_first_plot <- c("cal_MLR_t", "val_MLR_t",
-                           "cal_SI_1", "val_SI_1",
-                           "cal_SI_10", "val_SI_10",
-                           "cal_SI_10_t", "val_SI_10_t",
+                                  "cal_WG2_t", "val_WG2_t")
+shown_sets_first_plot <- c("cal_MLR", "val_MLR" ,
+                           "cal_MLR_t", "val_MLR_t",
+                           "cal_RF", "val_RF",
+                           "cal_RF_t", "val_RF_t",
                            "info")
 
 physio_all_plot <- type_physio_all[names(type_physio_all) %in% shown_sets_first_plot]
@@ -191,14 +193,22 @@ physio_climatic_first_plot <- type_physio_climatic[names(type_physio_climatic) %
 all_first_plot <- type_all[names(type_all) %in% c(shown_sets_first_plot, independent_from_descriptors)]
 
 
-beneficial_information <- create_boxplots(physio_climatic_first_plot,
-                                          all_first_plot,
-                                          physio_all_plot,
-                                          climatic_all_plot)
+beneficial_information <- create_boxplots(
+  data_1 = physio_climatic_first_plot,
+  data_2 = all_first_plot,
+  data_3 = physio_all_plot,
+  data_4 = climatic_all_plot)
 
-beneficial_information <- beneficial_information + ylim(1.0, 2.0)
+beneficial_information <- beneficial_information +
+  ylim(1.0, 2.0) +
+  scale_y_continuous(breaks=c(0.5, seq(1,2,0.1)),
+                     labels=c(0.5, seq(1,2,0.1))) +
+  theme_bw() +
+  theme(legend.position= c(0.05, 0.15),
+        legend.title = element_blank(),
+        legend.background=element_blank())
 
-ggsave(file = file.path(target_folder, "Figure_3_kge_on.png"),
+ggsave(file = file.path(target_folder, "Figure_3_regression.png"),
   beneficial_information,
   width = 25,
   height = 12,
@@ -207,22 +217,33 @@ ggsave(file = file.path(target_folder, "Figure_3_kge_on.png"),
 
 ################################################################################
 
-shown_sets_second_plot <- c("cal_RF_t", "val_RF_t",
-                            "cal_kmeans_t", "val_kmeans_t",
-                            "cal_knn", "val_knn",
+independent_from_descriptors <- c("cal_WG2", "val_WG2")
+shown_sets_second_plot <- c("cal_SI_1", "val_SI_1",
+                            "cal_SI_10", "val_SI_10",
+                            "cal_SI_1_t", "val_SI_1_t",
+                            "cal_SI_10_t", "val_SI_10_t",
                             "info")
 
 physio_second_plot <- type_physio_all[names(type_physio_all) %in% shown_sets_second_plot]
 climatic_second_plot <-  type_climatic_all[names(type_climatic_all) %in% shown_sets_second_plot]
 physio_climatic_second_plot <- type_physio_climatic[names(type_physio_climatic) %in% shown_sets_second_plot]
 all_second_plot <- type_all[names(type_all) %in% c(shown_sets_second_plot,
-                                                   "cal_WG2", "val_WG2")]
+                                                   independent_from_descriptors)]
 
 ml_information <- create_boxplots(
   climatic_second_plot, physio_second_plot,
   physio_climatic_second_plot, all_second_plot)
 
-ggsave(file = file.path(target_folder, "Figure_4_kge_on_outlier_included.png"),
+ml_information <- ml_information +
+  ylim(1.0, 2.0) +
+  scale_y_continuous(breaks=seq(1,2,0.1),
+                     labels=seq(1,2,0.1)) +
+  theme_bw() +
+  theme(legend.position= c(0.05, 0.15),
+        legend.title = element_blank(),
+        legend.background=element_blank())
+
+ggsave(file = file.path(target_folder, "Figure_4_SI.png"),
        ml_information,
        width = 25,
        height = 12,
@@ -230,11 +251,38 @@ ggsave(file = file.path(target_folder, "Figure_4_kge_on_outlier_included.png"),
        dpi = 300)
 
 
-ml_information <- ml_information + ylim(1.0, 2.0)
+independent_from_descriptors <- c("cal_WG2", "val_WG2",
+                                  "cal_SP_1", "val_SP_1",
+                                  "cal_SP_1_t", "val_SP_1_t",
+                                  "cal_SI_10_t", "val_SI_10_t")
+shown_sets_second_plot <- c("cal_kmeans", "val_kmeans",
+                            "cal_kmeans_t", "val_kmeans_t",
+                            "cal_knn", "val_knn",
+                            "cal_knn_t", "val_knn_t",
+                            "info")
 
-ggsave(file = file.path(target_folder, "Figure_4_kge_on.png"),
-  ml_information,
-  width = 25,
-  height = 12,
-  units = "cm",
-  dpi = 300)
+physio_second_plot <- type_physio_all[names(type_physio_all) %in% shown_sets_second_plot]
+climatic_second_plot <-  type_climatic_all[names(type_climatic_all) %in% shown_sets_second_plot]
+physio_climatic_second_plot <- type_physio_climatic[names(type_physio_climatic) %in% c(independent_from_descriptors,
+                                                                                       shown_sets_second_plot)]
+all_second_plot <- type_all[names(type_all) %in% c(shown_sets_second_plot)]
+
+ml_information <- create_boxplots(
+  climatic_second_plot, physio_second_plot,
+  physio_climatic_second_plot, all_second_plot)
+
+ml_information <- ml_information +
+  ylim(1.0, 2.0) +
+  scale_y_continuous(breaks=seq(1,2,0.1),
+                   labels=seq(1,2,0.1)) +
+  theme_bw() +
+  theme(legend.position= c(0.05, 0.15),
+        legend.title = element_blank(),
+        legend.background=element_blank())
+
+ggsave(file = file.path(target_folder, "Figure_5_proximity.png"),
+       ml_information,
+       width = 25,
+       height = 12,
+       units = "cm",
+       dpi = 300)

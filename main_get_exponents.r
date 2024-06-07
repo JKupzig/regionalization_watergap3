@@ -43,7 +43,7 @@ y <- readRDS(file.path(ROOT, "NEW_y.rds"))
 # Selection of Basins
 # ============================================================================
 
-reducer <- create_subset(MIN_QUALITY, MIN_SIZE)
+reducer <- create_subset(MIN_QUALITY, MIN_SIZE, use_kge = "on")
 red_x_orig <- x_orig[reducer, ]
 red_y <- y[reducer, ]
 
@@ -51,12 +51,12 @@ thresholds <- get_classes_for_gamma(red_y$mean_gamma, n_centers = 3, print_plot 
 lower_bound_tuning <- thresholds[2, 1]
 upper_bound_tuning <- thresholds[1, 3]
 
-columns_new_method <- c(10, 16, 17, 19, 25)
+columns_new_method <- c(2, 5, 6, 7, 10, 12, 15, 16, 17, 19, 22, 25)
 colnames(x_orig)[columns_new_method]
+
 columns_b2b <- c(2, 19, 5, 18, 10, 17)
 names(x_orig[columns_b2b])
-columns_false <- c(19,25)
-names(x_orig[columns_false])
+
 
 
 ################################################################################
@@ -67,24 +67,34 @@ maes <- NULL
 pb <- txtProgressBar(min = 1, max = SAMPLING_NUMBER, style = 3)
 set.seed(123)
 
+regression_to_save_mlr <- list()
 for (i in 1:SAMPLING_NUMBER) {
   setTxtProgressBar(pb, i)
   ind <- sample(2, nrow(red_x_orig), replace = TRUE, prob = c(0.50, 0.50))
-  maes_mlr <- apply.MultipleLinearRegression(
-    ind, red_x_orig[columns_new_method], red_y$mean_gamma,
-    mod = TRUE, tuningPars = c(lower_bound_tuning, upper_bound_tuning),
-    return_regression = TRUE)
 
-  y_est <- new_model(red_x_orig[columns_new_method],
-                     maes_mlr$regression$coefficients,
-                     lower_bound_tuning, upper_bound_tuning)
 
-  bm <- mean(abs(y_est - red_y$mean_gamma))
-  coefficients_new <- rbind(coefficients_new, maes_mlr$regression$coefficients)
+  regression <- run.MultipleLinearRegression(
+    ind,
+    red_x_orig[columns_new_method],
+    red_y$mean_gamma,
+    tuningPars = c(lower_bound_tuning, upper_bound_tuning),
+    ln="off",
+    return_regression = TRUE
+  )
+
+  regression_to_save_mlr[[i]] <- regression
+
+  y_est <- predict(regression, red_x_orig[columns_new_method])
+  y_est_tuned <- limit_gamma_to_be_valid(y_est, upper=upper_bound_tuning,
+                          lower = lower_bound_tuning)
+  bm <- mean(abs(y_est_tuned - red_y$mean_gamma))
+  coefficients_new <- rbind(coefficients_new, regression$coefficients)
   maes <- c(maes, bm)
 }
 
 idx <- which(maes == min(maes))
+saveRDS(regression_to_save_mlr[[idx]], "./data/regression_mlr.rds")
+
 coeffs_new <- coefficients_new[idx, ]
 log4r::info(my_logger, "#####################################")
 log4r::info(my_logger, "Info to use for MLR approach:")
@@ -96,23 +106,36 @@ for (name in names(coeffs_new)) {
 
 set.seed(123)
 coefficients_b2b <- NULL; b2b_maes <- NULL
+regression_to_save_b2b <- list()
 for (i in 1:SAMPLING_NUMBER){
   setTxtProgressBar(pb, i)
   ind <- sample(2, nrow(red_x_orig), replace = TRUE, prob = c(0.50, 0.50))
-  maes_b2b <-  apply.MultipleLinearRegression(
+
+  regression <- run.MultipleLinearRegression(
     ind,
     red_x_orig[columns_b2b],
     red_y$mean_gamma,
-    ln = "on", return_regression = TRUE)
+    tuningPars = c(lower_bound_tuning, upper_bound_tuning),
+    ln="on",
+    return_regression = TRUE
+  )
 
-  y_est <- wg2_model(red_x_orig[columns_b2b], maes_b2b$regression$coefficients)
-  quality <- mean(abs(y_est - red_y$mean_gamma))
-  b2b_maes <- c(b2b_maes, quality)
-  coefficients_b2b <- rbind(coefficients_b2b, maes_b2b$regression$coefficients)
+  regression_to_save_b2b[[i]] <- regression
+  y_est <- predict(regression, red_x_orig[columns_b2b])
+
+  y_est_limited <- limit_gamma_to_be_valid(exp(y_est),
+                                           upper=5,
+                                           lower = 0.1)
+
+  bm <- mean(abs(y_est_limited - red_y$mean_gamma))
+  b2b_maes <- c(b2b_maes, bm)
+  coefficients_b2b <- rbind(coefficients_b2b, regression$coefficients)
 }
 
 idx <- which(b2b_maes == min(b2b_maes))
 coeffs_wg2 <- coefficients_b2b[idx,]
+saveRDS(regression_to_save_b2b[[idx]], "./data/regression_b2b.rds")
+
 log4r::info(my_logger, "#####################################")
 log4r::info(my_logger, "Info to use for WG2 approach:")
 for (name in names(coeffs_wg2)) {
@@ -129,22 +152,6 @@ y_est_new <- new_model(
   lower_bound_tuning, upper_bound_tuning)
 
 y_est_wg2 <- wg2_model(
-  red_x_orig[columns_b2b],
+  red_x_orig[columns_b2b],-
   coeffs_wg2)
 
-mode <- function(x) {
-  ux <- unique(x)
-  tab <- tabulate(match(x, ux))
-  ux[tab == max(tab)]
-}
-
-log(median(y_est_wg2))
-median(y_est_new)
-
-most_simple_benchmark <- mean(abs(mean(red_y$mean_gamma) - red_y$mean_gamma))
-wg2_benchmark <- mean(abs(y_est_wg2 - red_y$mean_gamma))
-mlr_benchmark <- mean(abs(y_est_new - red_y$mean_gamma))
-log4r::info(my_logger, "#####################################")
-log4r::info(my_logger, sprintf("MAE when using mean as predictor: %f", most_simple_benchmark))
-log4r::info(my_logger, sprintf("MAE when using WG2 as predictor: %f", wg2_benchmark))
-log4r::info(my_logger, sprintf("MAE when using new MLR as predictor: %f", mlr_benchmark))

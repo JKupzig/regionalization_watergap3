@@ -2,5 +2,8 @@ results_exponents.txt
 Figure2_CreateBasinWorldPlot.R
 .Rhistory
 plots/**
+data/**
 main_create_world_basin_plot.r
 .Rproj.user
+data/**
+regionalization_watergap3.Rproj
