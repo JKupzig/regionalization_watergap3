@@ -1,3 +1,7 @@
+# setwd(r"(C:\Users\jenny\...")
+# set you own working directory (position of run.r) here
+
+# Creates the comprehensible sensitivity analysis for gamma (used in the Appendix)
 
 library(ggplot2)
 
