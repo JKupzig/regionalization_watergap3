@@ -7,3 +7,4 @@ main_create_world_basin_plot.r
 .Rproj.user
 data/**
 regionalization_watergap3.Rproj
+.RData
