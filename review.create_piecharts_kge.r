@@ -88,17 +88,20 @@ kge_all %>%
   )) %>%
   ggplot(.) +
   geom_boxplot(aes(x=gamma_groups, y=KGE, fill=runtype)) +
-  stat_summary(aes(x=gamma_groups, y=KGE, group=runtype),
-               fun.data = give.n, geom = "text",
-               position = position_dodge(width = 0.75)) +
+  # stat_summary(aes(x=gamma_groups, y=KGE, group=runtype),
+  #              fun.data = give.n, geom = "text",
+  #              position = position_dodge(width = 0.75)) +
   coord_cartesian(ylim = c(0.2, 1.0)) +
   theme_bw() +
   theme(legend.position = "bottom",
         legend.title = element_blank()) +
   xlab("Gamma") +
-  scale_fill_manual(values=hcl.colors(length(list_to_iterate)+1, "Spectral")) +
+  scale_fill_manual(labels=c("CAL (p.-ung.)", "MLR (best)", "MLR (worst)",
+                             "knn (best)", "knn (worst)", "SI (best)", "SI (worst)",
+                             "SP", "B2B"),
+                    values=hcl.colors(length(list_to_iterate)+1, "Spectral")) +
   guides(fill = guide_legend(nrow = 2))
 
 ggsave(file.path("./plots", "Figure_4a.png"),
-       width=24, height=16, units="cm", dpi=300)
+       width=20, height=16, units="cm", dpi=300)
 

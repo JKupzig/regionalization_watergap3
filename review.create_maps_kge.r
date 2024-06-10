@@ -40,8 +40,8 @@ list_to_iterate <- list(
   "SIBAD"=list(2, "SIBAD48",template),
   "SP"=list(2, "SP48",template),
   "B2B"= list(2, "B2B48", template),
-  "KMEANSGOOD"=list(2, "KMEANSGOOD48",template),
-  "KMEANSBAD"=list(2, "KMEANSBAD48",template),
+  #"KMEANSGOOD"=list(2, "KMEANSGOOD48",template),
+  #"KMEANSBAD"=list(2, "KMEANSBAD48",template),
   "DONOR"=list(1, "CAL",template)
   )
 
@@ -223,7 +223,7 @@ ggplot() +
   ggspatial::geom_sf(data=sf::st_as_sf(gauged_basins_world), fill="lightgrey") +
   ggspatial::geom_sf(data=sf::st_as_sf(bad_basins_world),
                                        aes(fill=layer)) +
-  scale_fill_manual(values=rev(hcl.colors(12, "Viridis"))[3:12]) +
+  scale_fill_manual(values=rev(hcl.colors(12, "Spectral"))[3:12]) +
   theme_bw() +
   theme(legend.position="bottom",
         legend.title = element_blank()) +

@@ -105,15 +105,6 @@ split_sample_test<- function(nrepeats=1000,
       mTRY=2)
     results[i,3,] <- unlist(maes_RF)
 
-    # maes_RF_flexible <- apply.RandomForest(
-    #   ind,
-    #   catchment_characteristics[column_idx],
-    #   catchment_gamma,
-    #   tuningPars=tuning_pars,
-    #   NTrees=200,
-    #   mTRY=length(column_idx))
-    # results[i,4,] <- unlist(maes_RF_flexible)
-
     #############################################################
     #SI after Beck et al. 2016
     maes_Beck1 <- apply.Beck2016(

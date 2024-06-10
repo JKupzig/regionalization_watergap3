@@ -1,7 +1,8 @@
 # setwd(r"(C:\Users\jenny\...")
 # set you own working directory (position of run.r) here
 
-# Runs split sample test an produces Figure 3, 4 and 5.
+# Runs split sample test an produces Figure 3 and data for Table 2 a) and b)
+# and boxplots for the appendix
 
 rm(list=ls())
 
@@ -21,7 +22,7 @@ source("./helper_functions.r")
 
 MIN_SIZE <- 5000
 MIN_QUALITY <- 0.2
-SAMPLING_NUMBER <- 100 #here 100 is used in paper
+SAMPLING_NUMBER <- 10 #here 100 is used in paper
 
 folder2use <- "./data"
 target_folder <- "./plots"
@@ -51,6 +52,10 @@ classified_gamma <-  gamma_with_kmeans[["df"]]
 thresholds <- gamma_with_kmeans[["dfThresholds"]]
 lower <- thresholds[2, 1]
 upper <- thresholds[1, 3]
+
+#Functions to use gamma
+log_gamma_lower <- exp(-1.183747)
+log_gamma_upper <- exp(0.6157841)
 
 # ============================================================================
 # Split Sample Test - have to verify selection!
@@ -98,6 +103,7 @@ array_all <- descriptor_sets[["p+cl"]][["result_array"]]
 array_physio_climatic <- descriptor_sets[["subset"]][["result_array"]]
 array_climatic_all <- descriptor_sets[["cl"]][["result_array"]]
 array_physio_all <- descriptor_sets[["p"]][["result_array"]]
+array_physio_np_cl <- descriptor_sets[["p_no_cl"]][["result_array"]]
 
 type_all <- descriptor_sets[["p+cl"]][["result_df"]]
 type_physio_climatic <- descriptor_sets[["subset"]][["result_df"]]
@@ -165,12 +171,13 @@ delta_tuning <- delta_tuning[delta_tuning$type == "orig.",]
 color_ramp_all <- brewer.pal(12, "Paired")
 color_ramp <- color_ramp_all[c(1:length(descriptor_sets))]
 ggplot(delta_tuning) +
+  geom_hline(yintercept = 0, col="darkgrey", linewidth=1, lty=2) +
   geom_boxplot(aes(x=method, y=value, fill=descriptor)) +
   theme_bw() +
   scale_fill_manual(values=color_ramp) +
-  scale_x_discrete(labels=c("kmeans","MLR", "knn","RF","SI", "SI ensemble", "SP", "B2B")) +
-  labs(x = "Method", y="logMAE (standard) - logMAE (tuned)") +
-  geom_hline(yintercept = 0, col="darkgrey", linewidth=1, lty=2)
+  scale_x_discrete(labels=c("kmeans", "knn","MLR", "RF","SI", "SI ensemble", "SP", "B2B")) +
+  labs(x = "Method", y="logMAE (standard) - logMAE (tuned)")
+
 
 ggsave(file = file.path(target_folder, "Figure_3_tuning_evaluation.png"),
        width = 25,

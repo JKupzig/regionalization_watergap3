@@ -1,3 +1,7 @@
+# setwd(r"(C:\Users\jenny\...")
+# set you own working directory (position of run.r) here
+
+# evaluates kge from split sample test and creates Figure 4a
 
 rm(list=ls())
 
@@ -24,10 +28,7 @@ for (i in 1:100){
   ind <- sample(2, nrow(red_x_orig), replace = TRUE, prob = c(0.50, 0.50))
   ind_list[[i]] <- ind
 }
-ind <- ind_list[[48]]
-
-
-
+ind <- ind_list[[48]] #representative split sample test
 
 template <- NULL
 
@@ -41,8 +42,8 @@ list_to_iterate <- list(
   "SIBAD"=list(2, "SIBAD48",template),
   "SP"=list(2, "SP48",template),
   "B2B"= list(2, "B2B48", template),
-  "KMEANSGOOD"=list(2, "KMEANSGOOD48",template),
-  "KMEANSBAD"=list(2, "KMEANSBAD48",template),
+  #"KMEANSGOOD"=list(2, "KMEANSGOOD48",template),
+  #"KMEANSBAD"=list(2, "KMEANSBAD48",template),
   "DONOR"=list(1, "CAL",template)
   )
 

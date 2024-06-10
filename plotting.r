@@ -54,7 +54,7 @@ create_boxplots <- function(data_1, data_2, data_3, data_4,
                          facets=~method) +
     geom_boxplot() +
     xlab("") +
-    ylab("MAE") +
+    ylab("logMAE") +
     facet_grid(. ~method, scales = "free_x", space = "free_x") +
     theme_bw() +
     scale_color_manual(values = c("cornflowerblue", "firebrick"),

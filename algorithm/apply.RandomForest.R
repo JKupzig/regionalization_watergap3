@@ -1,12 +1,11 @@
 source("./algorithm/mae.r")
 
-apply.RandomForest <- function(ind,
+run.RandomForest <- function(ind,
                                x,
                                y,
                                tuningPars=c(1.17, 2.64),
                                NTrees=150,
                                mTRY=2){
-  #nnce explanation video: https://www.youtube.com/watch?v=nxFG5xdpDto
 
   upper <- tuningPars[2]
   lower <- tuningPars[1]
@@ -24,7 +23,6 @@ apply.RandomForest <- function(ind,
                                         mtry=mTRY)
 
 
-  #Validation
   gamma_cal <- stats::predict(data.rf, data.training)
   gamma_val <- stats::predict(data.rf, data.test)
 
@@ -34,11 +32,40 @@ apply.RandomForest <- function(ind,
   gamma_cal_tuned <- limit_gamma_to_be_valid(gamma_cal, upper_limit=upper, lower_limit=lower)
   gamma_val_tuned <- limit_gamma_to_be_valid(gamma_val, upper_limit=upper, lower_limit=lower)
 
-  mae_cal <- mae(obs=y[ind==1], sim=gamma_cal_limited)
-  mae_val <- mae(obs=y[ind==2], sim=gamma_val_limited)
+  return(list(gamma_cal_limited=gamma_cal_limited,
+              gamma_val_limited=gamma_val_limited,
+              gamma_cal_tuned=gamma_cal_tuned,
+              gamma_val_tuned=gamma_val_tuned,
+              gamma_cal_calibrated=y[ind==1],
+              gamma_val_calibrated=y[ind==2]))
 
-  mae_cal_t <- mae(obs=y[ind==1], sim=gamma_cal_tuned)
-  mae_val_t <- mae(obs=y[ind==2], sim=gamma_val_tuned)
+}
+
+apply.RandomForest <- function(ind,
+                               x,
+                               y,
+                               tuningPars=c(1.17, 2.64),
+                               NTrees=150,
+                               mTRY=2){
+  #nnce explanation video: https://www.youtube.com/watch?v=nxFG5xdpDto
+
+
+  prediction <- run.RandomForest(ind=ind,
+                                 x=x,
+                                 y=y,
+                                 tuningPars=tuningPars,
+                                 NTrees=NTrees,
+                                 mTRY=mTRY)
+
+  mae_cal <- mae(obs=prediction$gamma_cal_calibrated,
+                 sim=prediction$gamma_cal_limited)
+  mae_val <- mae(obs=prediction$gamma_val_calibrated,
+                 sim=prediction$gamma_val_limited)
+
+  mae_cal_t <- mae(obs=prediction$gamma_cal_calibrated,
+                   sim=prediction$gamma_cal_tuned)
+  mae_val_t <- mae(obs=prediction$gamma_val_calibrated,
+                   sim=prediction$gamma_val_tuned)
 
   list2return = list("mae_cal"=mae_cal,
                      "mae_val"=mae_val,

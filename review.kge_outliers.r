@@ -87,8 +87,6 @@ kge_for_plot <- rbind(kge_all, kge_all_summarized)
 kge_for_plot$cont <- factor(kge_for_plot$cont,
                             levels=c("global", "af", "as", "au", "eu", "na", "sa"))
 
-
-
 overlapping_map <- kge_all %>%
   filter(.,KGE <= 0.2) %>%
   count(station_id) %>%
@@ -102,7 +100,27 @@ estimates_difficult_basins <- estimates[estimates$basin_id %in% basin_id,]
 kge_all[kge_all$station_id %in% basin_id, ]
 
 
+outliers <- kge_all %>%
+  filter(.,KGE <= 0.2) %>%
+  group_by(runtype) %>%
+  count(runtype) %>%
+  as.data.frame()
+
 hist(overlapping_map$n, xlab="#methods", ylab="#basin with KGE \u2264 0.2", main="")
-dev.copy(png, file.path("./plots", "review_kge_map_hist.png"),
+dev.copy(png, file.path("./plots", "Figure_4c.png"),
          width=12, height=12, units="cm", res=300)
 dev.off()
+
+
+# data for Table in Figure 4b
+kge_analyse <- kge_all %>%
+  filter(., !runtype %in% c("KMEANSGOOD", "KMEANSBAD")) %>%
+  group_by(runtype) %>%
+  summarize(max=quantile(KGE, probs=1.0),
+            min=quantile(KGE, probs=0),
+            median=quantile(KGE, probs=0.5),
+            mean=mean(KGE)) %>%
+  as.data.frame()
+kge_analyse[,c(2,4,3, 5)] <- round(kge_analyse[,c(2,4,3,5)], 3)
+
+merge(outliers, kge_analyse, by="runtype")
