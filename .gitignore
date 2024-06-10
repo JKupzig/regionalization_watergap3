@@ -8,3 +8,6 @@ main_create_world_basin_plot.r
 data/**
 regionalization_watergap3.Rproj
 .RData
+review.analyse_kmeans.r
+review.analyse_tuning.r
+review.robustness_check.r

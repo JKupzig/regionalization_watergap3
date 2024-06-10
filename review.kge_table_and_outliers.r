@@ -1,7 +1,7 @@
 # setwd(r"(C:\Users\jenny\...")
 # set you own working directory (position of run.r) here
 
-# evaluates kge from split sample test in the context of low quality basins and creates Figure 4b
+# evaluates kge from split sample test in the context of low quality basins and creates Figure 4b and 4c
 
 rm(list=ls())
 
