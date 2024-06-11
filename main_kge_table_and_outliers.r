@@ -124,3 +124,12 @@ kge_analyse <- kge_all %>%
 kge_analyse[,c(2,4,3, 5)] <- round(kge_analyse[,c(2,4,3,5)], 3)
 
 merge(outliers, kge_analyse, by="runtype")
+
+# pairwise.wilcox.test --> argument to use allregionalization methods!
+kge_all_cal <- kge_all[!kge_all$runtype %in% c("DONOR", "CAL"),]
+kge_all_cal$runtype <- as.character(kge_all_cal$runtype)
+pairwise.wilcox.test(kge_all_cal$KGE,
+                     kge_all_cal$runtype, paired=T, exact = FALSE,
+                     p.adjust="bonferroni")
+
+
