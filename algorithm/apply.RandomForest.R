@@ -57,14 +57,14 @@ apply.RandomForest <- function(ind,
                                  NTrees=NTrees,
                                  mTRY=mTRY)
 
-  mae_cal <- mae(obs=prediction$gamma_cal_calibrated,
+  mae_cal <- logmae(obs=prediction$gamma_cal_calibrated,
                  sim=prediction$gamma_cal_limited)
-  mae_val <- mae(obs=prediction$gamma_val_calibrated,
+  mae_val <- logmae(obs=prediction$gamma_val_calibrated,
                  sim=prediction$gamma_val_limited)
 
-  mae_cal_t <- mae(obs=prediction$gamma_cal_calibrated,
+  mae_cal_t <- logmae(obs=prediction$gamma_cal_calibrated,
                    sim=prediction$gamma_cal_tuned)
-  mae_val_t <- mae(obs=prediction$gamma_val_calibrated,
+  mae_val_t <- logmae(obs=prediction$gamma_val_calibrated,
                    sim=prediction$gamma_val_tuned)
 
   list2return = list("mae_cal"=mae_cal,

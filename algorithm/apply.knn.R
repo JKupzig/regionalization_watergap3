@@ -84,14 +84,14 @@ apply.knn <- function(ind,
 
   precictions <- run.knn(ind, x, y, tuningPars)
 
-  mae_cal <- mae(obs=precictions$gamma_cal_calibrated,
+  mae_cal <- logmae(obs=precictions$gamma_cal_calibrated,
                  sim=precictions$gamma_cal_limited)
-  mae_val <- mae(obs=precictions$gamma_val_calibrated,
+  mae_val <- logmae(obs=precictions$gamma_val_calibrated,
                  sim=precictions$gamma_val_limited)
 
-  mae_cal_t <- mae(obs=precictions$gamma_cal_calibrated,
+  mae_cal_t <- logmae(obs=precictions$gamma_cal_calibrated,
                    sim=precictions$gamma_cal_tuned)
-  mae_val_t <- mae(obs=precictions$gamma_val_calibrated,
+  mae_val_t <- logmae(obs=precictions$gamma_val_calibrated,
                    sim=precictions$gamma_val_tuned)
 
   list2return = list("mae_cal"=mae_cal,

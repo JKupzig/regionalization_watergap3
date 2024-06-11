@@ -81,11 +81,11 @@ apply.spatialProximity <- function(
   gamma_cal_tuned <- limit_gamma_to_be_valid(gamma_cal, upper_limit=upper, lower_limit=lower)
   gamma_val_tuned <- limit_gamma_to_be_valid(gamma_val, upper_limit=upper, lower_limit=lower)
 
-  mae_cal <- mae(obs=data.training.gamma, sim=gamma_cal_limited)
-  mae_val <- mae(obs=data.test.gamma, sim=gamma_val_limited)
+  mae_cal <- logmae(obs=data.training.gamma, sim=gamma_cal_limited)
+  mae_val <- logmae(obs=data.test.gamma, sim=gamma_val_limited)
 
-  mae_cal_t <- mae(obs=data.training.gamma, sim=gamma_cal_tuned)
-  mae_val_t <- mae(obs=data.test.gamma, sim=gamma_val_tuned)
+  mae_cal_t <- logmae(obs=data.training.gamma, sim=gamma_cal_tuned)
+  mae_val_t <- logmae(obs=data.test.gamma, sim=gamma_val_tuned)
 
   list2return = list("mae_cal"=mae_cal,
                      "mae_val"=mae_val,
@@ -94,4 +94,3 @@ apply.spatialProximity <- function(
 
   return(list2return)
 }
-

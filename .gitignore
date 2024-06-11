@@ -18,3 +18,4 @@ review.create_kge_analysis_increase_knowledge.r
 review.prepare_model_run_for_KGE.r
 main_get_exponents.r
 main_gamma_plot.r
+main_gamma_histograms.r

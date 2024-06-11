@@ -1,5 +1,5 @@
 
-real_mae <- function(obs, sim){
+mae <- function(obs, sim){
   mae <- mean(abs(obs-sim))
   return(mae)
 }
@@ -13,7 +13,7 @@ limit_gamma_to_be_valid <- function(values,
 }
 
 
-mae <- function(obs, sim){
+logmae <- function(obs, sim){
   obs = log(obs+1)
   sim = log(sim+1)
   mae <- mean(abs(obs-sim))
