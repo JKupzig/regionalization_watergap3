@@ -53,9 +53,6 @@ thresholds <- gamma_with_kmeans[["dfThresholds"]]
 lower <- thresholds[2, 1]
 upper <- thresholds[1, 3]
 
-#Functions to use gamma
-log_gamma_lower <- exp(-1.183747)
-log_gamma_upper <- exp(0.6157841)
 
 # ============================================================================
 # Split Sample Test - have to verify selection!
@@ -280,13 +277,13 @@ ggsave(file = file.path(target_folder, "Appendix_regression.png"),
 ################################################################################
 
 independent_from_descriptors <- c("cal_WG2", "val_WG2",
-                                  "cal_SP_1", "val_SP_1")
+                                  "cal_SP_1", "val_SP_1",
+                                  "cal_SP_1_t", "val_SP_1_t")
 
 shown_sets_second_plot <- c("cal_kmeans", "val_kmeans",
                             "cal_kmeans_t", "val_kmeans_t",
                             "cal_knn", "val_knn",
-                            "cal_SI_10_t", "val_SI_10_t",
-                            "cal_SI_1", "val_SI_1",
+                            "cal_knn_t", "val_knn_t",
                             "info")
 
 physio_second_plot <- type_physio_all[names(type_physio_all) %in% shown_sets_second_plot]
@@ -317,4 +314,39 @@ ggsave(file = file.path(target_folder, "Appendix_proximity.png"),
        units = "cm",
        dpi = 300)
 
+################################################################################
+independent_from_descriptors <- c("cal_WG2", "val_WG2")
 
+shown_sets_second_plot <- c("cal_SI_1", "val_SI_1",
+                            "cal_SI_1_t", "val_SI_1_t",
+                            "cal_SI_10", "val_SI_10",
+                            "cal_SI_10_t", "val_SI_10_t",
+                            "info")
+
+physio_second_plot <- type_physio_all[names(type_physio_all) %in% shown_sets_second_plot]
+climatic_second_plot <-  type_climatic_all[names(type_climatic_all) %in% shown_sets_second_plot]
+physio_climatic_second_plot <- type_physio_climatic[names(type_physio_climatic) %in% c(independent_from_descriptors,
+                                                                                       shown_sets_second_plot)]
+all_second_plot <- type_all[names(type_all) %in% c(shown_sets_second_plot)]
+
+ml_information <- create_boxplots(
+  climatic_second_plot,
+  physio_second_plot,
+  physio_climatic_second_plot,
+  all_second_plot)
+
+ml_information <- ml_information +
+  ylim(MIN, MAX) +
+  scale_y_continuous(breaks=BREAKS,
+                     labels=BREAKS) +
+  theme_bw() +
+  theme(legend.position= LEGEND_POSITION,
+        legend.title = element_blank(),
+        legend.background=element_blank())
+
+ggsave(file = file.path(target_folder, "Appendix_SI.png"),
+       ml_information,
+       width = 30,
+       height = 12,
+       units = "cm",
+       dpi = 300)
