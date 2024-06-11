@@ -31,7 +31,7 @@ There are also several scripts added to create additional plots from the paper (
 - **estimates.rds**: (NEU)
 
 - **LocalData-Folder**: data to plot Figure 6 and Figure 7 (VERÄNDERT)
-- **gamma_worldwide.grd**: stacked raster for the worldwide gamma distribution using the five selected methods (ensemble SI* 'subset', KNN 'p+cl', SP, MLR* 'p+cl' and B2B)  (VERÄNDERT)
+- **global_gamma.tif**: stacked raster for the worldwide gamma distribution using the five selected methods (layer order: B2B, KNN 'p+cl', MLR* 'p+cl', ensemble SI* 'subset', SP)
 - **ungauged_region.grd**: raster to distinguish between ungauged (1) and gauged (2) regions (note that gauged regions which are neglected are defined with -1 in this layer)  (VERÄNDERT)
 - **SD_GAMMA_global.tif**: (NEU)
 - **global_smax.tiff**: (NEU)
