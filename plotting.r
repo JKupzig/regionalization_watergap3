@@ -1,3 +1,51 @@
+
+plot_shadow <- function(results, ylabel, xlabel, name, legend=NULL) {
+  if (is.null(legend)){
+    legend = "topleft"
+  }
+  LWD = 2
+  CEX = 1.5
+
+  y_min <- min(results) - abs(min(results))*0.11
+  y_max <- max(results) + abs(max(results))*0.11
+  step_size <- case_when(
+    y_max <= 10 ~ 1.,
+    y_max > 10 & y_max <= 20 ~ 2,
+    y_max > 20 & y_max <= 100 ~ 10,
+    y_max > 100 & y_max <= 200 ~ 20,
+    y_max > 200 & y_max <= 500 ~ 50,
+    y_max > 500 & y_max <= 1000 ~ 100,
+    y_max > 1000 & y_max <= 5000 ~ 200,
+    y_max < 5000 ~ 1000
+  )
+
+  upper_limit <- apply(results, 2, max)
+  lower_limit <- apply(results, 2, min)
+  mean_line <- apply(results, 2, mean)
+
+  par(mar=c(5,6,4,1)+.1,
+      bg=NA)
+
+
+  plot(1:12, mean_line, type = 'l',
+       xlab = xlabel, ylab = ylabel,
+       ylim=c(y_min, y_max),
+       lwd = LWD, cex=CEX, cex.lab=CEX, cex.axis=CEX,
+       col="black", axes=F)
+  axis(2, seq(0, y_max, step_size))
+  axis(1, seq(1,12,1))
+  polygon(c(1:12, rev(1:12)),
+          c(upper_limit, rev(lower_limit)),
+          col = rgb(169/255, 169/255, 169/255, 0.5))
+
+  dev.copy(png,
+           name,
+           width=16, height=12, units="cm", res=300)
+  dev.off()
+
+}
+
+
 create_boxplots <- function(data_1, data_2, data_3, data_4,
                             data_5=NULL, data_6=NULL, data_7=NULL){
   require(ggplot2)

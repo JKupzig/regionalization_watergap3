@@ -45,3 +45,4 @@ data/type_climatic.rds
 data/type_physio_climatic.rds
 data/type_physio.rds
 data/valid_basins.txt
+data/SD_GAMMA_global.tif

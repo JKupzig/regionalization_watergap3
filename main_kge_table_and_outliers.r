@@ -132,4 +132,10 @@ pairwise.wilcox.test(kge_all_cal$KGE,
                      kge_all_cal$runtype, paired=T, exact = FALSE,
                      p.adjust="bonferroni")
 
+pairwise.wilcox.test(kge_all_cal$KGE,
+                     kge_all_cal$runtype, paired=T, exact = FALSE,
+                     p.adjust="BH")
 
+pairwise.wilcox.test(kge_all_cal$KGE,
+                     kge_all_cal$runtype, paired=T, exact = FALSE,
+                     p.adjust="BY")
