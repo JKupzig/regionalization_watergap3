@@ -1,6 +1,8 @@
 # setwd(r"(C:\Users\jenny\...")
 # set you own working directory (position of run.r) here
 
+# creates Figure 1b
+
 rm(list = ls())
 
 library(ggplot2)

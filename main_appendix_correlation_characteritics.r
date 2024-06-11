@@ -2,7 +2,7 @@
 # set you own working directory here
 
 # Description:
-# Script creates append A1 and A2 (Correlation & Distribution plots of
+# Script creates append C1 and C2 (Correlation & Distribution plots of
 # Catchment Descriptors).
 
 rm(list = ls())
