@@ -11,21 +11,9 @@ MIN_SIZE <- 5000
 folder2use <- "./data"
 TARGETFOLDER <- "./plots"
 
-quality <- readRDS(file.path(folder2use,"NEW_quality_monthly_bias.rds"))
 results <- readRDS(file.path(folder2use, "NEW_y.rds"))
-
-nrow(quality) - sum(create_subset(NULL, MIN_SIZE))
-nrow(quality) - sum(create_subset(MIN_SIZE, use_kge = "on"))
-nrow(quality) - sum(create_subset(MIN_QUALITY, MIN_SIZE, use_kge = "on"))
-
-sum(create_subset(NULL, MIN_SIZE))
-reducer <- create_subset(MIN_QUALITY, MIN_SIZE, use_kge = "on")
-reducer <- create_subset(MIN_QUALITY, MIN_SIZE, use_kge = "on")
-
 reducer <- create_subset(MIN_QUALITY, MIN_SIZE, use_kge = "on")
 red_results <- results[reducer,]
-
-hist(red_results$mean_gamma)
 
 #"Gamma histogram plot"
 hist_gamma <- ggplot(red_results, aes(x=mean_gamma)) +
@@ -47,14 +35,7 @@ hist_gamma <- ggplot(red_results, aes(x=mean_gamma)) +
   theme_classic()
 
 
-ggsave(file=file.path(TARGETFOLDER, "Figure_1b_histogram_calibrated_gamma_kge_considered.png"),
+ggsave(file=file.path(TARGETFOLDER, "Figure_1b_histogram_calibrated_gamma.png"),
        plot=hist_gamma,
        width = 16, height = 10, units = "cm",  dpi = 300)
 
-#"Gamma histogram plot"
-hist_gamma <- ggplot(red_results, aes(x=mean_gamma)) +
-  geom_histogram(fill="white", color="black",
-                 center=0,
-                 breaks=seq(0,5,0.1)) +
-  labs(x="calibrated Gamma (-)", y = "Count") +
-  theme_bw()

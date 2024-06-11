@@ -74,7 +74,7 @@ my_table <- gridExtra::tableGrob(dfs, theme=tt2, rows = NULL)
 grid::grid.newpage()
 grid::grid.draw(my_table)
 ggplot2::ggsave(
-  file = file.path(target_folder, "Table_1a_attribute_info_kge_on.png"),
+  file = file.path(target_folder, "Table_1a_attribute_info.png"),
   my_table, width = 14, height = 10, units = "cm")
 
 
@@ -160,51 +160,5 @@ plot(abs(new_result$pearson), new_result$perc)
 my_table <- gridExtra::tableGrob(new_result[, c(1,3,4,5,6)], theme = tt2, rows = NULL)
 grid.newpage()
 grid.draw(my_table)
-ggsave(file = file.path(target_folder, "Table_1b_entropy_correlation_kge_on.png"),
+ggsave(file = file.path(target_folder, "Table_1b_entropy_correlation.png"),
   my_table, width = 14, height = 10, units = "cm")
-
-# ============================================================================
-# MLR
-# ============================================================================
-
-df4table <- red_x_orig[, names(red_x_orig) %in% columns2use]
-df4table <- apply(df4table, 2, normalizeMinMax)
-data <- cbind(df4table, red_y)
-data <- data[,-c(13,14,16)]
-
-columns_to_add <- new_result$name
-subset_of_data <- as.data.frame(list("mean_gamma"=data[,13]))
-error <- c()
-for (name in columns_to_add)
-  {
-  subset_of_data[[name]] <- data[[name]]
-  mlr <- lm(mean_gamma ~., data = subset_of_data)
-  error <- c(error, median(resid(mlr)))
-}
-plot(abs(error))
-columns_to_add[1:5] # bestätigt, das Auswahl geeignet ist für MLR...
-
-# ============================================================================
-# PLSR
-# ============================================================================
-
-library(pls)
-
-normalizeMinMax <- function(x) {
-  num <- x - min(x)
-  denom <- max(x) - min(x)
-  return (num/denom)
-}
-
-
-df4table <- red_x_orig[, names(red_x_orig) %in% columns2use]
-df4table <- apply(df4table, 2, normalizeMinMax)
-data <- cbind(df4table, red_y)
-data <- data[,-c(13,14,16)]
-plsr_try <- plsr(mean_gamma ~ ., ncomp = 12, data = data, validation = "LOO")
-summary(plsr_try)
-plot(RMSEP(plsr_try), legendpos = "topright")
-
-plot(plsr_try, plottype="coef", ncomp=2:5, ylim=c(-3,3))
-
-
