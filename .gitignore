@@ -16,3 +16,4 @@ review.smax_plot.R
 review.create_maps_kge.r
 review.create_kge_analysis_increase_knowledge.r
 review.prepare_model_run_for_KGE.r
+main_get_exponents.r
