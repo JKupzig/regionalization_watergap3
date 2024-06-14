@@ -22,7 +22,6 @@ main_gamma_histograms.r
 data/_Ablage/**
 data/grdc_spatial/**
 data/KGE/**
-data/run_results/**
 data/upload/**
 data/G_CALIB_BASIN.UNF2
 data/G_GAMMA_HBV_B2B_eu.UNF0
@@ -45,4 +44,3 @@ data/type_climatic.rds
 data/type_physio_climatic.rds
 data/type_physio.rds
 data/valid_basins.txt
-data/SD_GAMMA_global.tif
