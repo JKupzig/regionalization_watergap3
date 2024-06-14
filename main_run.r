@@ -77,48 +77,48 @@ descriptor_sets = list(
     result_df = NULL)
   )
 
-for (subset in names(descriptor_sets)){
-  columns <- descriptor_sets[[subset]][["columns"]]
+# for (subset in names(descriptor_sets)){
+#   columns <- descriptor_sets[[subset]][["columns"]]
 
-  print(sprintf("%s: %s", subset, paste(names(red_x_orig)[columns], collapse=" ")))
-  array_all <- split_sample_test(
-    nrepeats = SAMPLING_NUMBER,
-    column_idx = columns,
-    tuning_pars = c(lower, upper),
-    catchment_distances = reduces_distance_to_centroid,
-    catchment_characteristics = red_x_orig,
-    catchment_gamma = classified_gamma$gamma)
+#   print(sprintf("%s: %s", subset, paste(names(red_x_orig)[columns], collapse=" ")))
+#   array_all <- split_sample_test(
+#     nrepeats = SAMPLING_NUMBER,
+#     column_idx = columns,
+#     tuning_pars = c(lower, upper),
+#     catchment_distances = reduces_distance_to_centroid,
+#     catchment_characteristics = red_x_orig,
+#     catchment_gamma = classified_gamma$gamma)
 
-  type_all <- result_array_to_df(array_all)
-  type_all$info <- subset
+#   type_all <- result_array_to_df(array_all)
+#   type_all$info <- subset
 
-  descriptor_sets[[subset]][["result_array"]] <- array_all
-  descriptor_sets[[subset]][["result_df"]] <- type_all
-}
+#   descriptor_sets[[subset]][["result_array"]] <- array_all
+#   descriptor_sets[[subset]][["result_df"]] <- type_all
+# }
 
-array_all <- descriptor_sets[["p+cl"]][["result_array"]]
-array_physio_climatic <- descriptor_sets[["subset"]][["result_array"]]
-array_climatic_all <- descriptor_sets[["cl"]][["result_array"]]
-array_physio_all <- descriptor_sets[["p"]][["result_array"]]
-array_physio_np_cl <- descriptor_sets[["p_no_cl"]][["result_array"]]
+# array_all <- descriptor_sets[["p+cl"]][["result_array"]]
+# array_physio_climatic <- descriptor_sets[["subset"]][["result_array"]]
+# array_climatic_all <- descriptor_sets[["cl"]][["result_array"]]
+# array_physio_all <- descriptor_sets[["p"]][["result_array"]]
+# array_physio_np_cl <- descriptor_sets[["p_no_cl"]][["result_array"]]
 
-type_all <- descriptor_sets[["p+cl"]][["result_df"]]
-type_physio_climatic <- descriptor_sets[["subset"]][["result_df"]]
-type_climatic_all <- descriptor_sets[["cl"]][["result_df"]]
-type_physio_all <- descriptor_sets[["p"]][["result_df"]]
+# type_all <- descriptor_sets[["p+cl"]][["result_df"]]
+# type_physio_climatic <- descriptor_sets[["subset"]][["result_df"]]
+# type_climatic_all <- descriptor_sets[["cl"]][["result_df"]]
+# type_physio_all <- descriptor_sets[["p"]][["result_df"]]
 
-# ============================================================================
-# Saving information for appendix
-# ============================================================================
-saveRDS(type_all, "./data/run_results/type_all.rds")
-saveRDS(type_climatic_all, "./data/run_results/type_climatic.rds")
-saveRDS(type_physio_all, "./data/run_results/type_physio.rds")
-saveRDS(type_physio_climatic, "./data/run_results/type_physio_climatic.rds")
+# # ============================================================================
+# # Saving information for appendix
+# # ============================================================================
+# saveRDS(type_all, "./data/run_results/type_all.rds")
+# saveRDS(type_climatic_all, "./data/run_results/type_climatic.rds")
+# saveRDS(type_physio_all, "./data/run_results/type_physio.rds")
+# saveRDS(type_physio_climatic, "./data/run_results/type_physio_climatic.rds")
 
-saveRDS(array_all, "./data/run_results/array_all.rds")
-saveRDS(array_climatic_all, "./data/run_results/array_climatic.rds")
-saveRDS(array_physio_all, "./data/run_results/array_physio.rds")
-saveRDS(array_physio_climatic, "./data/run_results/array_physio_climatic.rds")
+# saveRDS(array_all, "./data/run_results/array_all.rds")
+# saveRDS(array_climatic_all, "./data/run_results/array_climatic.rds")
+# saveRDS(array_physio_all, "./data/run_results/array_physio.rds")
+# saveRDS(array_physio_climatic, "./data/run_results/array_physio_climatic.rds")
 
 type_all <- readRDS("./data/run_results/type_all.rds")
 type_climatic_all <- readRDS("./data/run_results/type_climatic.rds")
