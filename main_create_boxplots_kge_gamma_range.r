@@ -74,16 +74,18 @@ give.n <- function(x){
   return(c(y = 1.0, label = length(x)))
 }
 
+gamma_expression <- expression(paste("Calibrated ", gamma, " (-)"))
+
 kge_all %>%
   merge(., red_y, by.x="station_id", by.y="ID", all.x=T) %>%
   filter(runtype != "DONOR") %>%
   mutate(runtype=factor(runtype, levels=names(list_to_iterate))) %>%
   mutate(gamma_groups = case_when(
-  mean_gamma <= .2 ~ ".1 to .2",
-  mean_gamma > 0.2 & mean_gamma <= 0.5 ~ ".2 to .5",
-  mean_gamma > 0.5 & mean_gamma <= 1 ~ ".5 to 1",
-  mean_gamma > 1 & mean_gamma <= 4 ~ "1 to 4",
-  mean_gamma > 4.0 & mean_gamma < 5. ~ "4 to 5",
+  mean_gamma <= .2 ~ "0.1-0.2",
+  mean_gamma > 0.2 & mean_gamma <= 0.5 ~ "0.2-.5",
+  mean_gamma > 0.5 & mean_gamma <= 1 ~ "0.5-1",
+  mean_gamma > 1 & mean_gamma <= 4 ~ "1-4",
+  mean_gamma > 4.0 & mean_gamma < 5. ~ "4-5",
   mean_gamma == 5.0 ~ "5"
   )) %>%
   ggplot(.) +
@@ -95,7 +97,9 @@ kge_all %>%
   theme_bw() +
   theme(legend.position = "bottom",
         legend.title = element_blank()) +
-  xlab("Gamma") +
+  theme(axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0))) +
+  xlab(gamma_expression) +
+  ylab("KGE (-)") +
   scale_fill_manual(labels=c("CAL (p.-ung.)", "MLR (best)", "MLR (worst)",
                              "knn (best)", "knn (worst)", "SI (best)", "SI (worst)",
                              "SP", "B2B"),

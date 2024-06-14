@@ -171,7 +171,7 @@ ggplot(delta_tuning) +
   geom_hline(yintercept = 0, col="darkgrey", linewidth=1, lty=2) +
   geom_boxplot(aes(x=method, y=value, fill=descriptor)) +
   theme_bw() +
-  scale_fill_manual(values=color_ramp) +
+  scale_fill_manual(name="Descriptor sets", values=color_ramp) +
   scale_x_discrete(labels=c("kmeans", "knn","MLR", "RF","SI", "SI ensemble", "SP", "B2B")) +
   labs(x = "Method", y="logMAE (standard) - logMAE (tuned)")
 

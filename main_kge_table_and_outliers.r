@@ -106,7 +106,7 @@ outliers <- kge_all %>%
   count(runtype) %>%
   as.data.frame()
 
-hist(overlapping_map$n, xlab="#methods", ylab="#basin with KGE \u2264 0.2", main="")
+hist(overlapping_map$n, xlab="#Methods", ylab="#Basin with KGE \u2264 0.2", main="")
 dev.copy(png, file.path("./plots", "Figure_4c.png"),
          width=12, height=12, units="cm", res=300)
 dev.off()
