@@ -206,13 +206,12 @@ for (river in names(river_to_look)){
 
 }
 
-
 shown_probs <- c(5, 25, 50, 75, 95)
 
 all_river_data %>%
   filter(runtype != "B2B") %>%
   mutate(river = factor(river, levels=names(river_to_look),
-                        labels=c("Tiber", "Pescara", "Ebro", "Tamar", "Rio Bravo", "Rio Deseado", "Rio Chubut", "Rio Negro"))) %>%
+                        labels=c("Tiber", "Pescara", "Ebro", "Tamar River", "Rio Bravo", "Rio Chubut", "Rio Deseado", "Rio Negro"))) %>%
   mutate(runtype = factor(runtype, levels=c("KNN", "SI", "MLR", "SP"), labels=c("knn", "SI", "MLR", "SP"))) %>%
   filter(probs %in% shown_probs) %>%
   tidyr::pivot_longer(cols=c(normalized_mean)) %>%
