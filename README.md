@@ -26,15 +26,14 @@ There are also several scripts added to create additional plots from the paper (
 - **NEW_x_orig.rds**: catchment descriptors, order is same as in NEW_y.rds
 - **NEW_y.rds**: result of calibration: ID - mean_CorrF - mean_gamma - sd_gamma
 - **NEW_quality_monthly_bias.rds**: catchment quality: ID & bias (other order than NEW_IDs!)
-
-- **monthly_kge_below_04.txt**: (NEU)
-- **estimates.rds**: (NEU)
-
-- **LocalData-Folder**: data to plot Figure 6 (VERÄNDERT)
+- **monthly_kge_below_04.txt**: list of basins to exclude due to low kge
+- **estimates.rds**: estimates gamma for representative split sample, evaluted in Chapter 3.3.
+- **LocalData-Folder**: data to plot Figure 6 and 7
 - **global_gamma.tif**: stacked raster for the worldwide gamma distribution using the five selected methods (layer order: B2B, KNN 'p+cl', MLR* 'p+cl', ensemble SI* 'subset', SP)
-- **ungauged_region.grd**: raster to distinguish between ungauged (1) and gauged (2) regions (note that gauged regions which are neglected are defined with -1 in this layer)  (VERÄNDERT)
-- **global_smax.tiff**: (NEU)
-
+- **ungauged_region.tiff**: raster to distinguish between ungauged (1) and gauged (2) regions (note that gauged regions which are neglected are defined with -1 in this layer)
+- **global_smax.tiff**: layer of global maximal soil moisture as used in WaterGAP3
+- **SD_GAMMA_global.tif**: Values shown in Figure 5
+- **cv_riveravailability_global.tiff** Values shown in Figure 6
 
 ## Plots
-In this folder the plots will appear after installing all necessary dependencies (s. above) and running the main_*.r scripts. These plots won't be exactly the same, due to random effects. However, due to the applied set.seed() the plots will not change when running them multiple times.
+In this folder the plots will appear after installing all necessary dependencies (s. above) and running the main_*.r scripts. These plots won't be exactly the same, due to random effects. However, due to the applied set.seed() the plots will not change when running them multiple times. Note that some table content will only printed when exceuting the script.
