@@ -162,3 +162,4 @@ grid.newpage()
 grid.draw(my_table)
 ggsave(file = file.path(target_folder, "Table_1b_entropy_correlation.png"),
   my_table, width = 14, height = 10, units = "cm")
+
