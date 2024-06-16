@@ -40,7 +40,7 @@ for (saturation in soil_saturation)
   }
 }
 
-png(file.path(target_folder, "review_line_plot_sa_gamma.png"),
+png(file.path(target_folder, "Figure_Appendix_B1_a.png"),
     res=300, width=16, height=16, units="cm")
 
 pal = colorRampPalette(c("navyblue", "firebrick"))
@@ -95,11 +95,5 @@ ggplot(data, aes(x=soil_saturation,
   ylim(0, 100) +
   theme_bw()
 
-ggsave(file.path(target_folder, "review_boxplot_sa_gamma.png"),
+ggsave(file.path(target_folder, "Figure_Appendix_B1_b.png"),
        width=16, height=16, units="cm", dpi=300)
-
-min(data$runoff[data$soil_saturation == "70" & data$gamma_value > 5])
-max(data$runoff[data$soil_saturation == "70" & data$gamma_value > 5])
-
-min(data$runoff[data$soil_saturation == "70" & data$gamma_value <= 5 & data$gamma_value >= 1])
-max(data$runoff[data$soil_saturation == "70" & data$gamma_value <= 5 & data$gamma_value >= 1])
