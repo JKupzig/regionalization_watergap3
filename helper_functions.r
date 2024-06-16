@@ -1,14 +1,41 @@
 
-create_subset <- function(min_quality, min_size = NULL)
-{
+read_kge <- function(cont, type, red_y, red_x_orig, ind, ind_type=2){
+  kge_cal_cont <- read.table(sprintf("./data/KGE/KGE_%s_%s.txt", type, cont), sep="\t", header=T)
+  kge_cal_cont$cont <- cont
+  kge_cal_cont$runtype <- type
 
+  missing_basins <- red_y[!(red_y$ID %in% kge_cal_cont$station_id) &
+                            red_x_orig$continent == cont, 1]
+  if (length(missing_basins) > 0){
+    stop(sprintf("something wrong with basins in %s!", cont))
+  }
+
+  reduced_kge_cont <- kge_cal_cont[kge_cal_cont$station_id %in% red_y$ID[ind==ind_type],]
+  return(reduced_kge_cont)
+}
+
+
+create_subset <- function(min_quality=NULL, min_size = NULL, use_kge="off")
+{
+  kge <- read.table(file.path("./data", "monthly_kge_below_04.txt"), header=T)
   quality <- readRDS(file.path("./data", "NEW_quality_monthly_bias.rds"))
   id_order <- readRDS(file.path("./data", "NEW_IDs.rds"))
-  quality <- quality[order(match(quality$V1, id_order)), ]
+  sorted_quality <- quality[order(match(quality$V1, id_order)), ]
 
-  ind <- (quality[, 2] > (1 - min_quality)) &
-    (quality[, 2] < (1 + min_quality))
+  ind <- rep(TRUE, nrow(quality))
 
+  if (!is.null(min_quality))
+  {
+    ind_quality <- (sorted_quality[, 2] > (1 - min_quality)) &
+      (sorted_quality[, 2] < (1 + min_quality))
+    ind <- ind & ind_quality
+  }
+
+  if (use_kge == "on")
+  {
+    ids_to_delete <- which(sorted_quality$V1 %in% kge$ids)
+    ind[ids_to_delete] <- FALSE
+  }
 
   if (!is.null(min_size))
   {
@@ -16,6 +43,7 @@ create_subset <- function(min_quality, min_size = NULL)
     ind_size <- data$areaBasin >= min_size
     ind <- ind & ind_size
   }
+
   return(ind)
 }
 
@@ -90,35 +118,4 @@ get_classes_for_gamma <- function(gamma, n_centers = 3, print_plot = FALSE){
 
   return(list(df = df, dfThresholds = threshold_info))
 
-}
-
-
-new_model <- function(data, coeffs, lower, upper) {
-  y_val <- coeffs[1] +
-    coeffs[2] * data$mean_slope +
-    coeffs[3] * data$mean_Forest +
-    coeffs[4] * data$mean_permaglac +
-    coeffs[5] * data$mean_temp +
-    coeffs[6] * data$sum_sw
-
-  y_val <- ifelse(y_val > upper, 5, y_val)
-  y_val <- ifelse(y_val < lower, 0.1, y_val)
-  return(y_val)
-}
-
-
-
-wg2_model <- function(data, coeffs) {
-  y_val <- coeffs[1] +
-    coeffs[2] * data$mean_smax +
-    coeffs[3] * data$mean_temp +
-    coeffs[4] * data$mean_op_water +
-    coeffs[5] * data$mean_Rg_max +
-    coeffs[6] * data$mean_slope +
-    coeffs[7] * data$mean_op_water
-
-  y_val = exp(y_val)
-  y_val <- ifelse(y_val > 5, 5, y_val)
-  y_val <- ifelse(y_val < 0.1, 0.1, y_val)
-  return(y_val)
 }

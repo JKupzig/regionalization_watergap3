@@ -42,7 +42,7 @@ functions <- list(
   median = ~median(.x, na.rm = TRUE)
 )
 
-reducer <- create_subset(MIN_QUALITY, MIN_SIZE)
+reducer <- create_subset(MIN_QUALITY, MIN_SIZE, use_kge = "on")
 red_x_orig <- x_orig[reducer, ]
 red_y <- y[reducer, ]
 df4table <- red_x_orig[, names(red_x_orig) %in% columns2use]
@@ -129,6 +129,7 @@ information_gain_df <- data.frame(name=columns2use, IG=information_gain_vector)
 information_gain_df <- information_gain_df[order(information_gain_df$IG, decreasing = TRUE), ]
 information_gain_df$perc <- information_gain_df$IG / rep(entropy_gamma, nrow(information_gain_df)) * 100
 
+
 # ============================================================================
 # correlation
 # ============================================================================
@@ -154,9 +155,11 @@ new_result <- merge(new_result, correlation_df3, by.x = "name", by.y = "name")
 new_result <- new_result[order(new_result$IG, decreasing = TRUE), ]
 new_result[, c(2, 3, 4, 5, 6)] <- round(new_result[, c(2, 3, 4, 5, 6)], 2)
 
+plot(abs(new_result$pearson), new_result$perc)
 
 my_table <- gridExtra::tableGrob(new_result[, c(1,3,4,5,6)], theme = tt2, rows = NULL)
 grid.newpage()
 grid.draw(my_table)
 ggsave(file = file.path(target_folder, "Table_1b_entropy_correlation.png"),
   my_table, width = 14, height = 10, units = "cm")
+
