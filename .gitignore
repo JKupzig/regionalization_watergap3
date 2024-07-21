@@ -44,3 +44,6 @@ data/type_climatic.rds
 data/type_physio_climatic.rds
 data/type_physio.rds
 data/valid_basins.txt
+data/cv_runoff_global.tif
+data/sd_riveravailability_global.tif
+data/sum_riveravailability_global.tif

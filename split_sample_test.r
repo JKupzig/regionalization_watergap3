@@ -59,8 +59,6 @@ split_sample_test<- function(nrepeats=1000,
 
   pb <- txtProgressBar(min = 1, max = nrepeats, style = 3)
 
-  cols_wg2 <- c(19, 10, 17, 18, 5)
-
   # create indexes for ensemble
   set.seed(123)
   index_list <- list()

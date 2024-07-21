@@ -1,6 +1,17 @@
 
 source("./algorithm/mae.r")
 
+run.variance_inflation_factor <- function(x, y, ln="off"){
+
+  if (ln=="on"){
+    regr <- lm(log(y) ~ ., x)
+  } else {
+    regr <- lm(y ~ ., x)
+  }
+  vif_values <- car::vif(regr)
+  return(vif_values)
+}
+
 run.MultipleLinearRegression <- function(ind,
                              x,
                              y,
