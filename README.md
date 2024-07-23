@@ -33,7 +33,8 @@ There are also several scripts added to create additional plots from the paper (
 - **ungauged_region.tiff**: raster to distinguish between ungauged (1) and gauged (2) regions (note that gauged regions which are neglected are defined with -1 in this layer)
 - **global_smax.tiff**: layer of global maximal soil moisture as used in WaterGAP3
 - **SD_GAMMA_global.tif**: Values shown in Figure 5
-- **cv_riveravailability_global.tiff** Values shown in Figure 6
+- **cv_riveravailability_global.tiff**: Values shown in Figure 6
+- **benchmarks_representative_sample**: benchmark metrics for chaper 3.3.
 
 ## Plots
 In this folder the plots will appear after installing all necessary dependencies (s. above) and running the main_*.r scripts. These plots won't be exactly the same, due to random effects. However, due to the applied set.seed() the plots will not change when running them multiple times. Note that some table content will only printed when exceuting the script.
