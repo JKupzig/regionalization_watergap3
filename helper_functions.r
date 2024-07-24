@@ -1,6 +1,6 @@
 
 read_kge <- function(cont, type, red_y, red_x_orig, ind, ind_type=2){
-  kge_cal_cont <- read.table(sprintf("./data/KGE/KGE_%s_%s.txt", type, cont), sep="\t", header=T)
+  kge_cal_cont <- read.table(sprintf("./data/KGE/KGE_%s_%s_extended.txt", type, cont), sep="\t", header=T)
   kge_cal_cont$cont <- cont
   kge_cal_cont$runtype <- type
 

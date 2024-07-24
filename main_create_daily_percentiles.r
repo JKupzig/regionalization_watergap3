@@ -219,9 +219,9 @@ all_river_data %>%
                        ordered=T, labels=c(expression(mu), expression(sigma)))) %>%
   ggplot(., aes(x=probs, y=value, group=probs)) +
   geom_boxplot() +
-  geom_jitter(aes(col=river, shape=runtype), alpha=0.8, width=4) +
+  geom_jitter(aes(col=river, shape=runtype), alpha=0.8, width=4, size=1.5) +
   scale_colour_manual(name="", values=hcl.colors(length(river_to_look), "Spectral")) +
-  ylim(-0.5,1.5) +
+  ylim(-0.5, 1.61) +
   ylab("Rel. differences to B2B (-)") +
   xlab("Percentile (%)") +
   theme_classic() +

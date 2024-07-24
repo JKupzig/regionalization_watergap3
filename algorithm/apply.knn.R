@@ -5,7 +5,8 @@ run.knn <- function(
     x,
     y,
     tuningPars,
-    robustness_in_train=FALSE){
+    robustness_in_train=FALSE,
+    shuffle=NULL){
 
   lower = tuningPars[1]
   upper = tuningPars[2]
@@ -13,6 +14,11 @@ run.knn <- function(
   # sub-sampling
   data.training <- x[ind==1,]
   data.test <- x[ind==2,]
+
+  #shuffling testing if defined
+  if (length(shuffle) == 1){
+    data.test[, shuffle] <- sample(data.test[,shuffle])
+  }
 
   gamma.training <- y[ind==1]
   gamma.test <- y[ind==2]
