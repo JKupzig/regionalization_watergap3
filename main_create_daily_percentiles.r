@@ -2,7 +2,7 @@
 # set you own working directory (position of run.r) here
 
 # evaluates daily discharge of selected ungauged river systems regarding differences
-# in mean annual percentiles and produces Figure 7a-d
+# in mean annual percentiles and produces Figure 7
 
 ###################################################################################################
 # Functions
@@ -56,7 +56,7 @@ quantile_df <- function(x, probs = c(0.05, 0.25, 0.5, 0.75, 0.95)) {
 # Constants
 ###################################################################################################
 
-
+TARGET <- "./plots"
 YEARS <- 1980:2016
 OUTPUT_PATH <- "./data/LocalData/rivers_%s"
 FOLDERS <- c("KNN", "SI", "MLR", "B2B", "SP")
@@ -201,7 +201,7 @@ for (river in names(river_to_look)){
     annotate(geom = "table", x = 5, y = y_max, label = list(my_table),
              vjust = 1, hjust = 0)
 
-  ggsave(sprintf("./plots/Figure_7_%s_%s.png", river_name, time_resolution),
+  ggsave(file.path(TARGET, sprintf("f07_%s_%s.png", river_name, time_resolution)),
          width=11, height=8.5, units="cm", dpi=300)
 
 }
@@ -229,5 +229,5 @@ all_river_data %>%
   theme(legend.margin=margin(0,0,0,0),
         legend.title = element_blank())
 
-ggsave(sprintf("./plots/Figure_7d_%s.png", time_resolution),
+ggsave(file.path(TARGET, sprintf("f07d_%s.png", time_resolution)),
        width=11, height=8.5, units="cm", dpi=300)

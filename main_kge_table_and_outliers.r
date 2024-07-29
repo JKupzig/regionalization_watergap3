@@ -9,6 +9,8 @@ source("./helper_functions.r")
 library(ggplot2)
 library(dplyr)
 
+TARGET <- "./plots"
+
 kge_all <- read.table("./data/benchmarks_representative_sample.txt",
                       header=TRUE)
 kge_all_summarized <- kge_all
@@ -23,7 +25,7 @@ overlapping_map <- kge_all %>%
   as.data.frame()
 
 hist(overlapping_map$n, xlab="#Methods", ylab="#Basin with KGE \u2264 0.2", main="")
-dev.copy(png, file.path("./plots", "Figure_4c.png"),
+dev.copy(png, file.path(TARGET, "f04c.png"),
          width=12, height=12, units="cm", res=300)
 dev.off()
 

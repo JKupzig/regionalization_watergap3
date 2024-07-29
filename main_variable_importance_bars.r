@@ -23,6 +23,9 @@ y <- readRDS(file.path(ROOT, "NEW_y.rds"))
 distance_to_centroid <- readRDS(file.path(ROOT, "NEW_distCentroid.rds"))
 columns_p_cl <- c(2, 5, 6, 7, 10, 12, 15, 16, 17, 19, 22, 25)
 
+TARGET <- "./plots"
+
+
 # ============================================================================
 # Selection of Basins
 # ============================================================================
@@ -95,6 +98,7 @@ for (column in columns_p_cl){
 
 
 # to create reproducible resultd
+set.seed(123)
 labels2use <- c("mean_smax" = "Soil Storage",
                 "mean_op_water" = "Open Water Bodies",
                 "mean_wetland" = "Wetlands",
@@ -168,21 +172,23 @@ for (var_name in names(red_x_orig[,columns_p_cl]))
   new_names <- c(new_names, labels2use[[var_name]])
 }
 
-png("./plots/appendix_importance_mlr.png", res = 300, width = 16, height = 12, units = "cm")
-par(mar = c(9.2, 5, 4, 1))
+png(file.path(TARGET, "fappE1a.png"),
+    res = 300, width = 16, height = 12, units = "cm")
+par(mar = c(13.2, 5, 4, 1))
 ylab <- expression(paste(Delta, "logMAE shuffling predictor (%)"))
 barplot((shuffled_benchmarks_mlr - original_benchmark_mlr) /
          original_benchmark_mlr * 100,
         names.arg = new_names,
-        las = 2, ylab = ylab)
+        las = 2, ylab = ylab, cex.names=0.8)
 dev.off()
 
 
-png("./plots/appendix_importance_knn.png", res = 300, width = 16, height = 12, units = "cm")
-par(mar = c(9.2, 5, 4, 1))
+png(file.path(TARGET, "fappE1b.png"),
+    res = 300, width = 16, height = 12, units = "cm")
+par(mar = c(13.2, 5, 4, 1))
 ylab <- expression(paste(Delta, "logMAE shuffling predictor (%)"))
 barplot((shuffled_benchmarks_knn-original_benchmark_knn) /
         original_benchmark_knn * 100,
         names.arg = new_names,
-        las = 2, ylab = ylab)
+        las = 2, ylab = ylab, cex.names=0.8)
 dev.off()

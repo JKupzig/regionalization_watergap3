@@ -1,7 +1,7 @@
 # setwd(r"(C:\Users\jenny\...")
 # set you own working directory (position of run.r) here
 
-# evaluates kge from split sample test and creates Figure 4a
+# evaluates kge from split sample test and creates Figure 4a and F1a
 
 rm(list=ls())
 
@@ -12,6 +12,7 @@ library(tidyr)
 source("./helper_functions.r")
 
 #Load Vars
+TARGET <- "./plots"
 ROOT <- "./data"
 MIN_SIZE <- 5000
 MIN_QUALITY <- 0.2
@@ -61,7 +62,7 @@ kge_all %>%
                     values=hcl.colors(length(list_to_iterate)+1, "Spectral")) +
   guides(fill = guide_legend(nrow = 2))
 
-ggsave(file.path("./plots", "Figure_4a.png"),
+ggsave(file.path(TARGET, "f04a.png"),
        width=20, height=16, units="cm", dpi=300)
 
 # same plot for modified NSE
@@ -95,5 +96,5 @@ kge_all %>%
                     values = hcl.colors(length(list_to_iterate) + 1, "Spectral")) +
   guides(fill = guide_legend(nrow = 2))
 
-ggsave(file.path("./plots", "appendix_f1_modified_nse.png"),
+ggsave(file.path(TARGET, "fappF1a.png"),
        width=20, height=16, units="cm", dpi=300)

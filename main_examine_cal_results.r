@@ -24,7 +24,7 @@ hist_gamma <- ggplot(red_results, aes(x=mean_gamma)) +
   geom_histogram(fill="white", color="black",
                  center=0,
                  breaks=seq(0,5,0.5)) +
-  labs(x=gamma_expression, y = "Count") +
+  labs(x=gamma_expression, y = "Count (-)") +
   scale_x_continuous(breaks=seq(0,4.5,0.5)+0.25,
                      labels=c("0.1-0.5",
                               "0.5-1",
@@ -40,6 +40,6 @@ hist_gamma <- ggplot(red_results, aes(x=mean_gamma)) +
   theme(axis.title.x = element_text(margin = margin(t = 10, r = 0, b = 0, l = 0)))
 
 
-ggsave(file=file.path(TARGETFOLDER, "Figure_1b_histogram_calibrated_gamma.png"),
+ggsave(file=file.path(TARGETFOLDER, "f01b.png"),
        plot=hist_gamma,
        width = 16, height = 10, units = "cm",  dpi = 300)

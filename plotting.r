@@ -94,6 +94,9 @@ create_boxplots <- function(data_1, data_2, data_3, data_4,
     sprintf("%s%s %s", df_new$info[x], df_new$tuned_str[x], df_new$ens_str[x])
   })
 
+  df_new$method[df_new$method == "WG2"] <- "B2B"
+  df_new$name_to_plot[df_new$method == "B2B"] <- paste0("benchm.",
+                                                        df_new$tuned_str[df_new$method == "B2B"])
 
   boxplot_plot <- ggplot(df_new,
                          aes(x = name_to_plot,

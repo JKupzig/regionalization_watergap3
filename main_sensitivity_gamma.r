@@ -40,13 +40,13 @@ for (saturation in soil_saturation)
   }
 }
 
-png(file.path(target_folder, "Figure_Appendix_B1_a.png"),
+png(file.path(target_folder, "fappB1a.png"),
     res=300, width=16, height=16, units="cm")
 
 pal = colorRampPalette(c("navyblue", "firebrick"))
 col <- 0
 plot(soil_saturation*100, outflow[,1], ylim= c(0,100), type="l",
-     ylab="runoff [% of precipitation]", xlab = "soil saturation [%]")
+     ylab="Runoff (% of precipitation)", xlab = "Soil saturation (%)")
 
 for (param in gamma)
 {
@@ -57,7 +57,7 @@ for (param in gamma)
 
 legend("topleft", col=pal(2), lty=1,
        legend=c(round(range(gamma), 1)),
-       title="gamma range")
+       title=expression(paste(gamma, " value")))
 
 dev.off()
 
@@ -76,8 +76,10 @@ ggplot(data, aes(x=soil_saturation,
                  y=runoff,
                  group=gamma,
                  fill=gamma)) +
-  scale_fill_manual(labels = c("0.1 to 1", "1 to 2", "2 to 3", "3 to 4", "4 to 5",
-                                "5 to 6", "6 to 7", "7 to 8", "8 to 9", "9 to 10"),
+  scale_fill_manual(
+    name = expression(paste(gamma, " value")),
+    labels = c("0.1-1", "1-2", "2-3", "3-4", "4-5",
+                                "5-6", "6-7", "7-8", "8-9", "9-10"),
                      values = list("1" = pal(10)[1],
                                    "2" = pal(10)[2],
                                    "3" = pal(10)[3],
@@ -90,10 +92,10 @@ ggplot(data, aes(x=soil_saturation,
                                    "10" = pal(10)[10]
                                    )) +
   geom_boxplot() +
-  labs(y = "runoff (% of precipitation)", x = "soil saturation (%)") +
+  labs(y = "Runoff (% of precipitation)", x = "Soil saturation (%)") +
   facet_wrap(~soil_saturation, scale="free") +
   ylim(0, 100) +
   theme_bw()
 
-ggsave(file.path(target_folder, "Figure_Appendix_B1_b.png"),
+ggsave(file.path(target_folder, "fappB1b.png"),
        width=16, height=16, units="cm", dpi=300)

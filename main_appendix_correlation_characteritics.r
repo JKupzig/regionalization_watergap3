@@ -48,6 +48,19 @@ labels2use <- c("mean_smax" = "Soil Storage",
                "sum_sw" = "Yearly Shortwave Downward Radiation",
                "gamma" = "Calibration Parameter")
 
+labels2use_wunits <- c("Soil~Storage~(mm)",
+                "Open~Water~Bodies~('%')",
+                "Wetlands~('%')",
+                "Size~(km^{2})",
+                "Slope~(cf.~Döll~'&'~Fiedler~2008)",
+                "Altitude~(m.a.s.l)",
+                "Sealed~Area~('%/100')",
+                "Forest~('%')",
+                "Permafrost~'&'~Glacier~('%')",
+                "Yearly~Shortwave~Downward~Radiation~(Wm^{-2})",
+                "Yearly~Precipitation~(mm)",
+                "Mean~Temperature~('°C')")
+
 df2examine <- red_x_orig[, names(red_x_orig) %in% columns2use]
 df2examine$gamma <- red_y$mean_gamma #add gamma
 
@@ -59,7 +72,7 @@ for (name in colnames(df2plot)){
   count <- count + 1
 }
 
-png(file = file.path(TARGETFOLDER, "appendix_characteristics_correlation.png"),
+png(file = file.path(TARGETFOLDER, "fappC1.png"),
     res = 300, units = "cm", height=32, width = 25)
 correlation_matirx <- cor(df2plot)
 corrplot::corrplot(correlation_matirx, order = 'AOE', type = 'lower', diag = FALSE,
@@ -72,16 +85,21 @@ dev.off()
 ################
 
 basin_info_long <- tidyr::pivot_longer(df2examine, cols = all_of(columns2use))
-basin_info_long$name <-  factor(basin_info_long$name, levels = columns2use)
+basin_info_long$name <-  factor(basin_info_long$name,
+                                levels = columns2use,
+                                labels = labels2use_wunits)
 
 ggplot() +
   geom_histogram(basin_info_long, mapping = aes(value),
                  alpha = 1, fill = "cornflowerblue") +
-  facet_wrap(~name, scales = "free_x", labeller = labeller(name = labels2use)) +
-  theme_bw()
+  facet_wrap(~name, scales = "free_x",
+             labeller = label_parsed) +
+  theme_bw() +
+  ylab("Count (-)") +
+  xlab("Descriptor value")
 
-ggsave(file.path(TARGETFOLDER, "appendix_characteristics_distribution.png"),
+ggsave(file.path(TARGETFOLDER, "fappC2.png"),
        device = "png",
-       width = 28, height = 25,
+       width = 30, height = 25,
        units = "cm",
        dpi = 300)

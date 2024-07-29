@@ -176,7 +176,7 @@ ggplot(delta_tuning) +
   labs(x = "Method", y="logMAE (standard) - logMAE (tuned)")
 
 
-ggsave(file = file.path(target_folder, "Figure_3_tuning_evaluation.png"),
+ggsave(file = file.path(target_folder, "f03.png"),
        width = 25,
        height = 12,
        units = "cm",
@@ -235,7 +235,7 @@ for (idx in c(1,3)){
 MIN <- 0.35
 MAX <- 0.7
 BREAKS <- seq(MIN, MAX, 0.1)
-LEGEND_POSITION <- c(0.1, 0.15)
+LEGEND_POSITION <- c(0.2, 0.15)
 # regression based approaches MLR, RF
 
 independent_from_descriptors <- c("cal_WG2", "val_WG2",
@@ -260,14 +260,12 @@ beneficial_information <- create_boxplots(
 
 beneficial_information <- beneficial_information +
   ylim(0.1, MAX) +
-  # scale_y_continuous(breaks=BREAKS,
-  #                    labels=BREAKS) +
   theme_bw() +
   theme(legend.position = LEGEND_POSITION,
         legend.title = element_blank(),
         legend.background=element_blank())
 
-ggsave(file = file.path(target_folder, "Appendix_regression.png"),
+ggsave(file = file.path(target_folder, "fappD1a.png"),
   beneficial_information,
   width = 30,
   height = 12,
@@ -307,7 +305,7 @@ ml_information <- ml_information +
         legend.title = element_blank(),
         legend.background=element_blank())
 
-ggsave(file = file.path(target_folder, "Appendix_proximity.png"),
+ggsave(file = file.path(target_folder, "fappD1c.png"),
        ml_information,
        width = 30,
        height = 12,
@@ -344,7 +342,7 @@ ml_information <- ml_information +
         legend.title = element_blank(),
         legend.background=element_blank())
 
-ggsave(file = file.path(target_folder, "Appendix_SI.png"),
+ggsave(file = file.path(target_folder, "fappD1b.png"),
        ml_information,
        width = 30,
        height = 12,
