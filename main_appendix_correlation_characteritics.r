@@ -96,7 +96,9 @@ ggplot() +
              labeller = label_parsed) +
   theme_bw() +
   ylab("Count (-)") +
-  xlab("Descriptor value")
+  xlab("Descriptor value") +
+  theme(axis.text=element_text(size=10)) +
+  theme(panel.spacing = unit(1.5, "lines"))
 
 ggsave(file.path(TARGETFOLDER, "fappC2.png"),
        device = "png",
