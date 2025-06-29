@@ -99,19 +99,20 @@ for (column in columns_p_cl){
 
 # to create reproducible resultd
 set.seed(123)
-labels2use <- c("mean_smax" = "Soil Storage",
-                "mean_op_water" = "Open Water Bodies",
-                "mean_wetland" = "Wetlands",
-                "areaBasin" = "Size",
-                "mean_slope" = "*Slope",
-                "mean_altitude" = "Altitude",
-                "mean_sealedArea" = "Sealed Area",
-                "mean_Forest" = "*Forest",
-                "mean_permaglac" = "*Permafrost & Glacier",
-                "mean_temp" = "*Mean Temperature",
-                "sum_prec" = "Yearly Precipitation",
-                "sum_sw" = "*Yearly Shortwave Downward Radiation",
-                "gamma" = "Calibration Parameter")
+labels2use <- c("mean_smax" = "soil storage",
+                "mean_op_water" = "open water fraction",
+                "mean_wetland" = "wetland fraction",
+                "areaBasin" = "basin size",
+                "mean_slope" = "slope",
+                "mean_altitude" = "altitude",
+                "mean_sealedArea" = "sealed area fraction",
+                "mean_Forest" = "forest fraction",
+                "mean_permaglac" = "permafrost & glacier fraction",
+                "mean_temp" = "mean temperature",
+                "sum_prec" = "annual precipitation",
+                "sum_sw" = "annual shortwave radiation",
+                "gamma" = "calibration parameter")
+
 
 new_names <- c()
 for (var_name in names(red_x_orig[,columns_p_cl]))
@@ -152,19 +153,19 @@ for (column in columns_p_cl){
 
 # Plotting
 
-labels2use <- c("mean_smax" = "Soil Storage",
-                "mean_op_water" = "Open Water Bodies",
-                "mean_wetland" = "Wetlands",
-                "areaBasin" = "Size",
-                "mean_slope" = "*Slope",
-                "mean_altitude" = "Altitude",
-                "mean_sealedArea" = "Sealed Area",
-                "mean_Forest" = "*Forest",
-                "mean_permaglac" = "*Permafrost & Glacier",
-                "mean_temp" = "*Mean Temperature",
-                "sum_prec" = "Yearly Precipitation",
-                "sum_sw" = "*Yearly Shortwave Downward Radiation",
-                "gamma" = "Calibration Parameter")
+labels2use <- c("mean_smax" = "soil storage",
+                "mean_op_water" = "open water fraction",
+                "mean_wetland" = "wetland fraction",
+                "areaBasin" = "basin size",
+                "mean_slope" = "slope",
+                "mean_altitude" = "altitude",
+                "mean_sealedArea" = "sealed area fraction",
+                "mean_Forest" = "forest fraction",
+                "mean_permaglac" = "permafrost & glacier fraction",
+                "mean_temp" = "mean temperature",
+                "sum_prec" = "annual precipitation",
+                "sum_sw" = "annual shortwave radiation",
+                "gamma" = "calibration parameter")
 
 new_names <- c()
 for (var_name in names(red_x_orig[,columns_p_cl]))
@@ -172,23 +173,23 @@ for (var_name in names(red_x_orig[,columns_p_cl]))
   new_names <- c(new_names, labels2use[[var_name]])
 }
 
-png(file.path(TARGET, "fappE1a.png"),
+png(file.path(TARGET, "fappE1a_neu.png"),
     res = 300, width = 16, height = 12, units = "cm")
 par(mar = c(13.2, 5, 4, 1))
-ylab <- expression(paste(Delta, "logMAE shuffling predictor (%)"))
+ylab <- expression(paste(Delta, "logMAE shuffling predictor [%]"))
 barplot((shuffled_benchmarks_mlr - original_benchmark_mlr) /
          original_benchmark_mlr * 100,
         names.arg = new_names,
-        las = 2, ylab = ylab, cex.names=0.8)
+        las = 2, ylab = ylab, cex.names=1.0)
 dev.off()
 
 
-png(file.path(TARGET, "fappE1b.png"),
+png(file.path(TARGET, "fappE1b_neu.png"),
     res = 300, width = 16, height = 12, units = "cm")
 par(mar = c(13.2, 5, 4, 1))
-ylab <- expression(paste(Delta, "logMAE shuffling predictor (%)"))
+ylab <- expression(paste(Delta, "logMAE shuffling predictor [%]"))
 barplot((shuffled_benchmarks_knn-original_benchmark_knn) /
         original_benchmark_knn * 100,
         names.arg = new_names,
-        las = 2, ylab = ylab, cex.names=0.8)
+        las = 2, ylab = ylab, cex.names=1.0)
 dev.off()

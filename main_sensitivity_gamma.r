@@ -40,13 +40,13 @@ for (saturation in soil_saturation)
   }
 }
 
-png(file.path(target_folder, "fappB1a.png"),
-    res=300, width=16, height=16, units="cm")
+png(file.path(target_folder, "fappB1a_neu.png"),
+    res=300, width=12, height=12, units="cm")
 
 pal = colorRampPalette(c("navyblue", "firebrick"))
 col <- 0
 plot(soil_saturation*100, outflow[,1], ylim= c(0,100), type="l",
-     ylab="Runoff (% of precipitation)", xlab = "Soil saturation (%)")
+     ylab="Runoff [% of precipitation]", xlab = "Soil saturation [%]")
 
 for (param in gamma)
 {
@@ -92,10 +92,16 @@ ggplot(data, aes(x=soil_saturation,
                                    "10" = pal(10)[10]
                                    )) +
   geom_boxplot() +
-  labs(y = "Runoff (% of precipitation)", x = "Soil saturation (%)") +
+  labs(y = "Runoff [% of precipitation]", x = "Soil saturation [%]") +
   facet_wrap(~soil_saturation, scale="free") +
   ylim(0, 100) +
-  theme_bw()
+  theme_bw() +
+  theme(axis.text = element_text(size=14, color="black"),
+        strip.text = element_text(size=14, color="black"),
+        axis.title = element_text(size=14, color="black"),
+        legend.text = element_text(size=14, color="black"),
+        legend.title = element_text(size=14, color="black"),
+        legend.position = "top")
 
-ggsave(file.path(target_folder, "fappB1b.png"),
+ggsave(file.path(target_folder, "fappB1b_neu.png"),
        width=16, height=16, units="cm", dpi=300)

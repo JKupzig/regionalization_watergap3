@@ -34,32 +34,32 @@ columns2use <- c("mean_smax", "mean_op_water", "mean_wetland", "areaBasin",
   "mean_slope", "mean_altitude", "mean_sealedArea", "mean_Forest",
   "mean_permaglac", "sum_sw", "sum_prec", "mean_temp")
 
-labels2use <- c("mean_smax" = "Soil Storage",
-               "mean_op_water" = "Open Water Bodies",
-               "mean_wetland" = "Wetlands",
-               "areaBasin" = "Size",
-               "mean_slope" = "Slope",
-               "mean_altitude" = "Altitude",
-               "mean_sealedArea" = "Sealed Area",
-               "mean_Forest" = "Forest",
-               "mean_permaglac" = "Permafrost & Glacier",
-               "mean_temp" = "Mean Temperature",
-               "sum_prec" = "Yearly Precipitation",
-               "sum_sw" = "Yearly Shortwave Downward Radiation",
-               "gamma" = "Calibration Parameter")
+labels2use <- c("mean_smax" = "soil storage",
+               "mean_op_water" = "open water fraction",
+               "mean_wetland" = "wetland fraction",
+               "areaBasin" = "basin size",
+               "mean_slope" = "slope",
+               "mean_altitude" = "altitude",
+               "mean_sealedArea" = "sealed area fraction",
+               "mean_Forest" = "forest fraction",
+               "mean_permaglac" = "permafrost & glacier fraction",
+               "mean_temp" = "mean temperature",
+               "sum_prec" = "annual precipitation",
+               "sum_sw" = "annual shortwave radiation",
+               "gamma" = "calibration parameter")
 
-labels2use_wunits <- c("Soil~Storage~(mm)",
-                "Open~Water~Bodies~('%')",
-                "Wetlands~('%')",
-                "Size~(km^{2})",
-                "Slope~(cf.~Döll~'&'~Fiedler~2008)",
-                "Altitude~(m.a.s.l)",
-                "Sealed~Area~('%/100')",
-                "Forest~('%')",
-                "Permafrost~'&'~Glacier~('%')",
-                "Yearly~Shortwave~Downward~Radiation~(Wm^{-2})",
-                "Yearly~Precipitation~(mm)",
-                "Mean~Temperature~('°C')")
+labels2use_wunits <- c("soil~storage~'[mm]'",
+                "open~water~fraction~'[%]'",
+                "wetland~fraction~'[%]'",
+                "basin~size~textstyle('[')*km^{2}*textstyle(']')",
+                "atop(slope, (cf.~Döll~'&'~Fiedler~2008))",
+                "altitude~'[m.a.s.l]'",
+                "sealed~area~'[%/100]'",
+                "forest~fraction~'[%]'",
+                "atop(permafrost~'&',glacier~fraction~'[%]')",
+                "atop(annual~shortwave, radiation~textstyle('[')*Wm^{-2}*textstyle(']'))",
+                "annual~precipitation~'[mm]'",
+                "mean~temperature~'[°C]'")
 
 df2examine <- red_x_orig[, names(red_x_orig) %in% columns2use]
 df2examine$gamma <- red_y$mean_gamma #add gamma
@@ -72,12 +72,12 @@ for (name in colnames(df2plot)){
   count <- count + 1
 }
 
-png(file = file.path(TARGETFOLDER, "fappC1.png"),
+png(file = file.path(TARGETFOLDER, "fappC1_neu.png"),
     res = 300, units = "cm", height=32, width = 25)
 correlation_matirx <- cor(df2plot)
 corrplot::corrplot(correlation_matirx, order = 'AOE', type = 'lower', diag = FALSE,
-                   addCoef.col = 'black', number.cex = 0.8,
-                   tl.col = 'black', tl.srt = 65, tl.cex = 0.95)
+                   addCoef.col = 'black', number.cex = 1.2,
+                   tl.col = 'black', tl.srt = 65, tl.cex = 1.2, cl.cex=1.2)
 
 dev.off()
 
@@ -97,10 +97,12 @@ ggplot() +
   theme_bw() +
   ylab("Count (-)") +
   xlab("Descriptor value") +
-  theme(axis.text=element_text(size=10)) +
-  theme(panel.spacing = unit(1.5, "lines"))
+  theme(title=element_text(size=14)) +
+  theme(panel.spacing = unit(1.5, "lines"),
+        axis.text = element_text(size = 14, color="black"),
+        strip.text = element_text(size = 14, color="black"))
 
-ggsave(file.path(TARGETFOLDER, "fappC2.png"),
+ggsave(file.path(TARGETFOLDER, "fappC2_neu.png"),
        device = "png",
        width = 30, height = 25,
        units = "cm",

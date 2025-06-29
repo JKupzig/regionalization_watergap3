@@ -236,6 +236,7 @@ MIN <- 0.35
 MAX <- 0.7
 BREAKS <- seq(MIN, MAX, 0.1)
 LEGEND_POSITION <- c(0.2, 0.15)
+TEXTSIZE = 12
 # regression based approaches MLR, RF
 
 independent_from_descriptors <- c("cal_WG2", "val_WG2",
@@ -263,9 +264,13 @@ beneficial_information <- beneficial_information +
   theme_bw() +
   theme(legend.position = LEGEND_POSITION,
         legend.title = element_blank(),
-        legend.background=element_blank())
+        legend.background=element_blank(),
+        axis.title = element_text(size=TEXTSIZE, color ="black"),
+        legend.text = element_text(size=TEXTSIZE, color ="black"),
+        axis.text.y = element_text(size=TEXTSIZE, color ="black"),
+        axis.text.x = element_text(angle = 25, vjust = 1, hjust=1, size=TEXTSIZE, color ="black"))
 
-ggsave(file = file.path(target_folder, "fappD1a.png"),
+ggsave(file = file.path(target_folder, "fappD1a_neu.png"),
   beneficial_information,
   width = 30,
   height = 12,
@@ -303,9 +308,13 @@ ml_information <- ml_information +
   theme_bw() +
   theme(legend.position= LEGEND_POSITION,
         legend.title = element_blank(),
-        legend.background=element_blank())
+        legend.background=element_blank(),
+        axis.title = element_text(size=TEXTSIZE, color ="black"),
+        legend.text = element_text(size=TEXTSIZE, color ="black"),
+        axis.text.y = element_text(size=TEXTSIZE, color ="black"),
+        axis.text.x = element_text(size=TEXTSIZE, color ="black"))
 
-ggsave(file = file.path(target_folder, "fappD1c.png"),
+ggsave(file = file.path(target_folder, "fappD1c_neu.png"),
        ml_information,
        width = 30,
        height = 12,
@@ -340,9 +349,13 @@ ml_information <- ml_information +
   theme_bw() +
   theme(legend.position= LEGEND_POSITION,
         legend.title = element_blank(),
-        legend.background=element_blank())
+        legend.background=element_blank(),
+        axis.title = element_text(size=TEXTSIZE, color ="black"),
+        legend.text = element_text(size=TEXTSIZE, color ="black"),
+        axis.text.y = element_text(size=TEXTSIZE, color ="black"),
+        axis.text.x = element_text(size=TEXTSIZE, color ="black"))
 
-ggsave(file = file.path(target_folder, "fappD1b.png"),
+ggsave(file = file.path(target_folder, "fappD1b_neu.png"),
        ml_information,
        width = 30,
        height = 12,
